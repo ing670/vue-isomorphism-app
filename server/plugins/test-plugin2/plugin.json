@@ -1,0 +1,12 @@
+{
+  "installed":true,
+  "id": "test-plugin2",
+  "name": "NodeBB OAuth SSO",
+  "description": "NodeBB Plugin that allows users to login/register via any configured OAuth provider.",
+  "url": "https://github.com/julianlam/nodebb-plugin-sso-oauth",
+  "main": "library.js",
+  "hooks": [
+    { "hook":"home", "method": "deleteUserData" },
+    { "hook":"index", "method": "getStrategy" }
+  ]
+}
