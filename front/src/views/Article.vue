@@ -30,7 +30,7 @@
             <div class="article-share">
                 <div class="good">
                     <span>赞</span>
-                    <span>200</span>
+                    <span>{{$store.state.home.articelDetial.likeNum}}</span>
                 </div>
                 <div class="article-share-action">
                     <span>评论</span>
@@ -78,7 +78,7 @@
 </script>
 
 <style lang="less">
-    @import "../components/var";
+    @import "../theme/var";
 
     .article-view {
         margin-top: @main-margin;

@@ -1,5 +1,5 @@
-import 'normalize.css'
 // import '../iview/styles/index.less'
+
 import Vue from 'vue'
 import App from './App.vue'
 import { createStore } from './store'

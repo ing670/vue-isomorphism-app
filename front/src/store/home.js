@@ -3,7 +3,7 @@
  */
 // import Types from "./motations-types"
 import axios from "axios"
-var baseUrl = 'http://localhost:3000';
+var baseUrl = host;
 var articel = {
     state: {
         lists: [],

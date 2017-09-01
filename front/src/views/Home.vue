@@ -65,7 +65,7 @@
 </script>
 
 <style lang="less">
-    @import "../components/var";
+    @import "../theme/var";
 
     .home-view {
         .home-content-nav {
