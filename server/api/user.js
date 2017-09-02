@@ -37,5 +37,23 @@ module.exports = [
                 });
             })(req, res, next);
         }
+    },{
+        path: '/getUserInfo',
+        method: 'get',
+        callback: function (req, res, next) {
+            if(req.user){
+                 res.json({code:0,data: req.user});
+            }else{
+                res.json({code:1001,data:null,msg:"用户未登录"})
+            }
+
+        }
+    },{
+        path: '/logOut',
+        method: 'get',
+        callback: function (req, res, next) {
+            req.logout();
+            res.json({code:0,data:null,msg:"用户已退出"});
+        }
     }
 ]

@@ -4,6 +4,7 @@ const vueConfig = require('./vue-loader.config')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const isProd = process.env.NODE_ENV === 'production'
+// const extractCSS = new ExtractTextPlugin('css/[name].css');
 
 module.exports = {
     devtool: isProd
@@ -17,11 +18,17 @@ module.exports = {
     resolve: {
         alias: {
             'public': path.resolve(__dirname, '../public')
-        }
+        },
+        extensions: ['.js', '.vue', '.less','.md']
+
     },
     module: {
         noParse: /es6-promise\.js$/, // avoid webpack shimming process
         rules: [
+            {
+                test: /\.md$/,
+                loader: 'raw-loader'
+            },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',

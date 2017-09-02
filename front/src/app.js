@@ -7,8 +7,12 @@ import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
 import titleMixin from './util/title'
 import * as filters from './util/filters'
+import VueClickoutside from './util/clickoutside'
+// Vue.directive('v-clickoutside', VueClickoutside)
+VueClickoutside.install(Vue)
 // import iView from '../iview';
 // mixin for handling title
+// Vue.use(VueClickoutside)
 Vue.mixin(titleMixin)
 // Vue.use(iView)
 // register global utility filters.

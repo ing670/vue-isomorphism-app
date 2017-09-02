@@ -4,9 +4,9 @@
             <h3><span>登录</span>
                 <Icon @click="hide" class="login-form-close" fontCode="e5cd"></Icon>
             </h3>
-            <input  class="login-form-input" type="text" placeholder="请输入手机号或邮箱"/>
-            <input class="login-form-input" type="password" placeholder="请输入密码"/>
-            <div class="login-button">登录</div>
+            <input  v-model="userName" class="login-form-input" type="text" placeholder="请输入手机号或邮箱"/>
+            <input v-model="passWord" class="login-form-input" type="password" placeholder="请输入密码"/>
+            <div class="login-button" @click="login">登录</div>
             <div class="login-help"><span>没有账号?<a href="javascript:void(0)">注册</a></span><a href="javascript:void(0)">忘记密码</a>
             </div>
             <div class="login-other-way"><span>第三方账号登录:</span>
@@ -20,10 +20,13 @@
     </div>
 </template>
 <script>
+
     import Icon from './icon/index.vue'
     export default{
         data(){
             return {
+                userName:'',
+                passWord:'',
                 showing: false
             }
         },
@@ -37,7 +40,22 @@
                 }
             }
         },
+        created(){
+            this.$store.dispatch("GET_USER_INFO")
+        },
+//        asyncData ({store,route}) {
+//            console.log("asdasdasdsadasdasdasdsadasdsa")
+//            return store.dispatch("GET_USER_INFO")
+//        },
         methods: {
+            login(){
+              this.$store.dispatch("LOGIN",{userName:this.userName,passWord:this.passWord}).then(()=>{
+                  console.log(this.$store.state.user.info)
+                  if(this.$store.state.user.info){
+                        this.hide();
+                  }
+              })
+            },
             show(){
                 this.showing = true;
             },

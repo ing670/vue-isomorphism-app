@@ -9,22 +9,25 @@ Vue.use(Router)
 // const UserView = () => import('../views/UserView.vue')
 const Home = () => import('../views/Home.vue')
 const Article = () => import('../views/Article.vue')
+const Main = () => import('../views/Main.vue')
+const Post = () => import('../views/Post.vue')
 
+export function createRouter() {
+    return new Router({
+        mode: 'history',
+        scrollBehavior: () => ({y: 0}),
+        routes: [
+            {
+                path: '/', component: Main,
+                children: [
+                    {path: '/article/:id', component: Article},
+                    {path: '/', component: Home},
+                ]
+            },
+            {
+                path: '/post', component: Post,
 
-export function createRouter () {
-  return new Router({
-    mode: 'history',
-    scrollBehavior: () => ({ y: 0 }),
-    routes: [
-      // { path: '/top/:page(\\d+)?', component: createListView('top') },
-      // { path: '/new/:page(\\d+)?', component: createListView('new') },
-      // { path: '/show/:page(\\d+)?', component: createListView('show') },
-      // { path: '/ask/:page(\\d+)?', component: createListView('ask') },
-      // { path: '/job/:page(\\d+)?', component: createListView('job') },
-      // { path: '/item/:id(\\d+)', component: ItemView },
-      // { path: '/user/:id', component: UserView },
-        { path: '/article/:id', component: Article  },
-        { path: '/', component: Home  }
-    ]
-  })
+            },
+        ]
+    })
 }

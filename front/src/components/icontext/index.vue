@@ -11,7 +11,7 @@
 <script>
     //参数,position,有left,right,top,bottom
     // onWhole整行点击,classNames样式类名,icon所有参数
-    import Icon from '../icon'
+    import Icon from '../icon/index.vue'
     export default {
         components: {
             Icon

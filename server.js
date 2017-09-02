@@ -1,3 +1,4 @@
+require("babel-register")
 const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
@@ -109,7 +110,7 @@ function render (req, res) {
   }
 
   const context = {
-    title: 'Vue HN 2.0', // default title
+    title: 'Vue ssr app 2.0', // default title
     url: req.url
   }
   renderer.renderToString(context, (err, html) => {
