@@ -10,13 +10,12 @@ module.exports = [
         method: 'post',
         action: "register",
         callback (req, res) {
-            test.home = "register";
+            // test.home = "register";
             var userInfo = {};
             userInfo.name = req.body.userName;
             userInfo.password = req.body.passWord;
             req.body.phone && (userInfo.phone = req.body.phone)
             userInfo.email = req.body.email;
-            userInfo.createTime = Date.now();
             var user = new User(userInfo);
             user.save(function (err) {
                 if (err) {
@@ -34,7 +33,7 @@ module.exports = [
                 if (!user) { return res.json({code:1001,msg:"登录失败"}); }
                 req.logIn(user, function(err) {
                     if (err) { return next(err); }
-                    return res.json({code:0,userInfo: user});
+                    return res.json({code:0,data: user});
                 });
             })(req, res, next);
         }

@@ -17,6 +17,7 @@ axios.post(baseUrl+'/api/register',{
     userName: "ing670",
     passWord: "123456",
     captcha: "123456",
+    phone:"13249726272",
     email: '346467167@qq.com'
 }).then(function (res) {
     console.log(res.data);

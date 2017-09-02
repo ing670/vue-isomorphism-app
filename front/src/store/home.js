@@ -4,7 +4,6 @@
 // import Types from "./motations-types"
 import axios from "axios"
 var baseUrl=typeof host == "undefined"?global.host:host
-
 var articel = {
     state: {
         lists: [],
