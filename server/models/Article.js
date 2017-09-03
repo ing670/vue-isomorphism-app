@@ -8,7 +8,7 @@
 var mongoose = require('../database/db');
 var Schema = mongoose.Schema;
 var articleJson = {
-    'state':0,//是否验证通过的用户
+    'state':0,//0:未发表 1:已经发表
     'title':{ //文章标题
         type: 'String',
         required:[true,'请输入标题'],

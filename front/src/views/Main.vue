@@ -1,5 +1,5 @@
 <template>
-    <div  >
+    <div  class="main-page">
         <main>
             <header class="header">
                 <nav class="inner">
@@ -76,19 +76,25 @@
 </script>
 <style lang="less">
     @import '../theme/var';
+.main-page {
+    .view {
+        position: relative;
+        margin: 0 auto;
+        width: 960px;
+    }
     .user-wrap {
         position: relative;
-        .user-after-login{
+        .user-after-login {
             display: flex;
             align-items: center;
-            .user-after-login-post{
+            .user-after-login-post {
                 cursor: pointer;
                 display: flex;
                 align-items: center;
-                span{
-                 color: @main-text-color;
+                span {
+                    color: @main-text-color;
                 }
-                .wk-icon{
+                .wk-icon {
                     font-size: 32px;
                     color: @main-them-color;
 
@@ -114,7 +120,6 @@
             }
         }
     }
-
 
     .header {
         margin-top: @main-margin;
@@ -154,4 +159,5 @@
         }
 
     }
+}
 </style>

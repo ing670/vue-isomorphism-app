@@ -1,36 +1,36 @@
 <template>
-    <div>
-        <textarea id="editor"/>
-        <MavonEditor ></MavonEditor>
+    <div style="height: 100%">
+        <MarkdownEditor v-model="value" :options="options" height="100%">    </MarkdownEditor>
     </div>
 </template>
 <script>
-    //    import  SimpleMDE from "../../vendor/simplemde/src/js/simplemde"
-//    import  "simplemde/dist/simplemde.min.css"
-    import 'mavon-editor/dist/css/index.css'
-
-//    import SimpleMDE from "simplemde"
-    import {mavonEditor} from 'mavon-editor'
-//    import SimpleMDE from "simplemde"
-
-    import Icon from './icon/index.vue'
+    import { MarkdownEditor } from './markdown-editor/main'
+    import hljs from 'highlightjs' // have to npm install highlight
+    import 'highlightjs/styles/github.css'
 
     export default {
         data() {
-            return {}
-        },
-        mounted() {
-//            this.$nextTick(() => {
-//                let mde = new SimpleMDE({element: window.document.querySelector('#editor')})
-//
-//            })
+            return {
+                value: '@[toc] # 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n',
+                options: {
+                    highlight (str, lang) { // you can add highlightjs plugin to highlight your code
+                        if (lang && hljs.getLanguage(lang)) {
+                            try {
+                                return hljs.highlight(lang, str).value
+                            } catch (__) {}
+                        }
+                        return ''
+                    }
+                }
+            }
         },
         components: {
-            Icon,
-            "MavonEditor":mavonEditor
+            MarkdownEditor
         }
     }
 </script>
 <style lang="less">
-
+    .editor {
+        height: 680px;
+    }
 </style>

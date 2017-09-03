@@ -40,9 +40,6 @@
                 }
             }
         },
-        created(){
-            this.$store.dispatch("GET_USER_INFO")
-        },
 //        asyncData ({store,route}) {
 //            console.log("asdasdasdsadasdasdasdsadasdsa")
 //            return store.dispatch("GET_USER_INFO")
@@ -81,6 +78,7 @@
         width: 100%;
         background: rgba(0, 0, 0, 0.3);
         top: 0;
+        left: 0;
         display: flex;
         justify-content: center;
         align-items: center;

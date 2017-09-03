@@ -63,6 +63,7 @@ router.onReady(() => {
 
   app.$mount('#app')
     window.app = app;
+  window.store= store
 })
 
 // service worker

@@ -1,12 +1,21 @@
 <template>
     <div id="app">
         <transition name="fade" mode="out-in">
-            <router-view class="view"></router-view>
+            <router-view ></router-view>
         </transition>
     </div>
 </template>
 <script>
     import 'normalize.css';
+    import Login from './components/Login.vue'
+    export default {
+        compoennts:{
+            Login
+        },
+        created(){
+            this.$store.dispatch("GET_USER_INFO")
+        }
+    }
 </script>
 <style lang="less">
     body {
@@ -14,11 +23,6 @@
 
     }
 
-    .view {
-        position: relative;
-        margin: 0 auto;
-        width: 960px;
-    }
 
     .router-link-exact-active {
         color: lightcoral !important;
