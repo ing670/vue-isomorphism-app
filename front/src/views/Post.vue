@@ -85,36 +85,7 @@
         </div>
 
         <main >
-            <header class="header">
-                <nav class="inner">
-                    <div>
-                        <router-link to="/" exact>
-                            <img class="logo" src="../../public/avatar.jpg" alt="logo">
-                        </router-link>
-                    </div>
-                    <div class="inner-nav">
-                        <router-link to="/">首页</router-link>
-                        <router-link to="/zl">专栏</router-link>
-                        <router-link to="/fx">发现</router-link>
-                        <router-link to="/bq">标签</router-link>
-                    </div>
-                    <div class="user-wrap" v-clickoutside="hideMenu">
-                        <a class="user-action" v-if="!$store.state.user.info" href="javascript:void(0);"><span
-                                @click="$refs.login.show()">登录</span>|<span>注册</span></a>
-                        <div v-if="$store.state.user.info" class="user-after-login">
-                            <IconText @click="toPostPage" class="user-after-login-post" text="发布" fontCode="e145"
-                                      position="left"></IconText>
-                            <a @click="showMenu=true" class="user-action" href="javascript:void(0);">
-                                <img class="avatar" :src="$store.state.user.info.avatar||avatar" alt="logo"></a>
-                        </div>
-                        <ul class="user-feature" v-show="showMenu">
-                            <li><a href="javascript:void(0)">主页</a></li>
-                            <li><a href="javascript:void(0)">设置</a></li>
-                            <li><a href="javascript:void(0)" @click="logOut">退出</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
+
             <div class="view">
                 <Editor></Editor>
                 <!--<mavon-editor v-model="value"/>-->
@@ -181,6 +152,7 @@
         display: flex;
         .post-page-category-list ,.post-page-article-list{
             width: 170px;
+            min-width: 170px;
             background: #fff;
             border-right: 1px solid @main-border-color;
             .logo-wrap {
@@ -224,6 +196,8 @@
         }
         .post-page-article-list{
             width: 240px;
+            min-width: 240px;
+
         }
         .logo {
             height: 60px;

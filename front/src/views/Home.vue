@@ -1,5 +1,5 @@
 <template>
-    <div class="home-view">
+    <div class="home-view margin-top">
         <div class="home-content">
             <nav class="home-content-nav">
                 <span>热门文章</span>

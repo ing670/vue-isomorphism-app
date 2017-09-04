@@ -12,7 +12,6 @@ var Schema = mongoose.Schema;
 var categoryJson = {
     'title':{
         type: 'String',
-        required:[true,'请您输入分类名'],
     },
     'createTime':{type:'String', default: new Date().getTime() }
 };

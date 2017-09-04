@@ -79,8 +79,9 @@
 .main-page {
     .view {
         position: relative;
-        margin: 0 auto;
+        margin: @main-margin auto;
         width: 960px;
+
     }
     .user-wrap {
         position: relative;
@@ -122,7 +123,6 @@
     }
 
     .header {
-        margin-top: @main-margin;
         min-width: 960px;
         background: #fff;
         .user-action {

@@ -33,7 +33,12 @@ module.exports = [
                 if (!user) { return res.json({code:1001,msg:"登录失败"}); }
                 req.logIn(user, function(err) {
                     if (err) { return next(err); }
-                    return res.json({code:0,data: user});
+                    let userInfo = user.toJSON();
+                    let token = jwt.sign(userInfo, '*ing670*');
+                    //let token = jwt.sign({exp: Math.floor(Date.now() / 1000) + (60 * 60),data:user}, '*ing670*');
+                    userInfo.password=null;
+                    userInfo.token = token;
+                    return res.json({code:0,data: userInfo});
                 });
             })(req, res, next);
         }
