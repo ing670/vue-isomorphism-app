@@ -13,7 +13,7 @@
             Login
         },
         created(){
-            this.$store.dispatch("GET_USER_INFO")
+//            this.$store.dispatch("GET_USER_INFO")
         }
     }
 </script>

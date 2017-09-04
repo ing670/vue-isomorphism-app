@@ -4,15 +4,15 @@
             <header class="header">
                 <nav class="inner">
                     <div>
-                        <router-link to="/" exact>
+                        <router-link :to='$store.state.user.info?"/?token="+$store.state.user.info.token:"/"' exact>
                             <img class="logo" src="../../public/avatar.jpg" alt="logo">
                         </router-link>
                     </div>
                     <div class="inner-nav">
-                        <router-link to="/">首页</router-link>
-                        <router-link to="/zl">专栏</router-link>
-                        <router-link to="/fx">发现</router-link>
-                        <router-link to="/bq">标签</router-link>
+                        <router-link :to='$store.state.user.info?"/?token="+$store.state.user.info.token:"/"'>首页</router-link>
+                        <router-link :to='$store.state.user.info?"/zl?token="+$store.state.user.info.token:"/zl"'>专栏</router-link>
+                        <router-link :to='$store.state.user.info?"/fx?token="+$store.state.user.info.token:"/fx"'>发现</router-link>
+                        <router-link :to='$store.state.user.info?"/tag?token="+$store.state.user.info.token:"/tag"'>标签</router-link>
                     </div>
                     <div class="user-wrap" v-clickoutside="hideMenu">
                         <a class="user-action" v-if="!$store.state.user.info" href="javascript:void(0);"><span

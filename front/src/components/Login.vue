@@ -49,7 +49,7 @@
               this.$store.dispatch("LOGIN",{userName:this.userName,passWord:this.passWord}).then(()=>{
                   console.log(this.$store.state.user.info)
                   if(this.$store.state.user.info){
-                        this.hide();
+                      location.replace(location.href+'?token='+this.$store.state.user.info.token)
                   }
               })
             },

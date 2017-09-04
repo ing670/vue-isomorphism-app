@@ -1,13 +1,12 @@
 /**
  * Created by sdsd on 2017/8/30.
  */
-let jwt = require('jsonwebtoken');
-let jwtmid = require('express-jwt');
 
 let User = require('../models/User');
 let passport=require('../middleware/PassportMid')
-
-
+let userAuth=require('../middleware/userAuthorization')
+const jwt = require('jsonwebtoken');
+const key = '*ing670*';
 module.exports = [
     {
         path: '/register',
@@ -38,10 +37,12 @@ module.exports = [
                 req.logIn(user, function(err) {
                     if (err) { return next(err); }
                     let userInfo = user.toJSON();
-                    let token = jwt.sign(userInfo, '*ing670*');
+                    delete userInfo.password;
+                    let token = jwt.sign(userInfo, key);
                     //let token = jwt.sign({exp: Math.floor(Date.now() / 1000) + (60 * 60),data:user}, '*ing670*');
-                    userInfo.password=null;
                     userInfo.token = token;
+                    tokenMap[userInfo._id] = token;
+                    console.log(tokenMap)
                     return res.json({code:0,data: userInfo});
                 });
             })(req, res, next);
@@ -49,32 +50,15 @@ module.exports = [
     },{
         path: '/getUserInfo',
         method: 'get',
-        mid:jwtmid({
-            secret: '*ing670*',
-            credentialsRequired:false,
-            getToken: function  (req) {
-                if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-                    console.log(req.headers.authorization.split(' ')[1])
-                    return req.headers.authorization.split(' ')[1];
-                } else if (req.query && req.query.token) {
-                    return req.query.token;
-                }
-                return null;
-            }}),
-        callback: function (req, res, next) {
-            if(arguments.length>1)
-            if(req.user){
-                 res.json({code:0,data: req.user});
-            }else{
-                res.json({code:1001,data:null,msg:"用户未登录"});
-            }
-
+        mid:userAuth.checkLogin,
+        callback: function (req, res, user) {
+            res.json({code:0,data: req.loginUser});
         }
     },{
         path: '/logOut',
         method: 'get',
+        mid:userAuth.logout,
         callback: function (req, res, next) {
-            req.logout();
             res.json({code:0,data:null,msg:"用户已退出"});
         }
     }

@@ -21,7 +21,7 @@ var articel = {
             })
         },
         GET_HOME_DATA: (store, args) => {
-            return Promise.all([store.dispatch("GET_CATEGORYS"), store.dispatch("GET_ARTICELS")])
+            return Promise.all([store.dispatch("GET_CATEGORYS"), store.dispatch("GET_ARTICELS"),store.dispatch("GET_USER_INFO",args.query.token)])
 
         },
         GET_CATEGORYS: (store, args) => {

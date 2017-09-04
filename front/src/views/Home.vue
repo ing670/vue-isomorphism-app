@@ -52,8 +52,8 @@
         },
 
 
-        asyncData ({store}) {
-            return store.dispatch('GET_HOME_DATA')
+        asyncData ({store,route}) {
+            return store.dispatch('GET_HOME_DATA',route)
         },
 
 //  title () {

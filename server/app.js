@@ -21,6 +21,7 @@ var MongoStore = require('connect-mongo')(session);
 var mongoose = require('./database/db');
 var passport = require(__dirname + '/middleware/PassportMid');
 var initApi = require('./api');
+global.tokenMap={"59aa508f6c7df00a90e143fe":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OWFhNTA4ZjZjN2RmMDBhOTBlMTQzZmUiLCJuYW1lIjoiaW5nNjcwIiwicGhvbmUiOiIxMzI0OTcyNjI3MiIsImVtYWlsIjoiMzQ2NDY3MTY3QHFxLmNvbSIsImF2YXRhciI6Imh0dHA6Ly93eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZXQyenJRenJxQlpaODBvdldFZkEwZDZzMlFrNzRJQ3AwbUVvMmNPV1N6VjZndm5wUmNJUHJmZEQwSTBsNUJyeVdpY2FDY0IzbWVPWGtxNkNpYkVpY1VMZVEvMCIsIl9fdiI6MCwiY3JlYXRlVGltZSI6IjE1MDQzMzM2ODAyNTciLCJpYXQiOjE1MDQ1NDUzNjF9.SAahyXZwxaH0j3IGtrri5M6psJRCjGHACh8So-YvijY"};
 
 // view engine setup
 // app.set('views', path.join(__dirname, '../public/views'));
