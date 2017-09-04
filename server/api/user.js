@@ -2,8 +2,12 @@
  * Created by sdsd on 2017/8/30.
  */
 let jwt = require('jsonwebtoken');
+let jwtmid = require('express-jwt');
+
 let User = require('../models/User');
 let passport=require('../middleware/PassportMid')
+
+
 module.exports = [
     {
         path: '/register',
@@ -45,11 +49,24 @@ module.exports = [
     },{
         path: '/getUserInfo',
         method: 'get',
+        mid:jwtmid({
+            secret: '*ing670*',
+            credentialsRequired:false,
+            getToken: function  (req) {
+                if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+                    console.log(req.headers.authorization.split(' ')[1])
+                    return req.headers.authorization.split(' ')[1];
+                } else if (req.query && req.query.token) {
+                    return req.query.token;
+                }
+                return null;
+            }}),
         callback: function (req, res, next) {
+            if(arguments.length>1)
             if(req.user){
                  res.json({code:0,data: req.user});
             }else{
-                res.json({code:1001,data:null,msg:"用户未登录"})
+                res.json({code:1001,data:null,msg:"用户未登录"});
             }
 
         }
