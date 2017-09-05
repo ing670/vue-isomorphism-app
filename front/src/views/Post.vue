@@ -306,6 +306,10 @@
                     align-items: center;
                     span {
                         color: @main-text-color;
+                        &:last-child{
+                            font-size: 18px;
+                            margin-left: 5px;
+                        }
                     }
                     .wk-icon {
                         font-size: 32px;
