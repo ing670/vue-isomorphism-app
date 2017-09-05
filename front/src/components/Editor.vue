@@ -32,6 +32,7 @@
 <style lang="less">
     .editor-wrap{
         height: 100%;
+
     }
     .editor {
         height: 680px;
