@@ -27,7 +27,7 @@ module.exports = [
         action: "getArticleDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Article.findOne({'_id': req.params.id}).populate('category').exec(function (err, article) {
+                Article.findOne({'_id': req.params.id}).populate('tag').exec(function (err, article) {
                     if (!err) {
                         res.json({code: 0, data: article});
                     } else {
@@ -87,7 +87,7 @@ module.exports = [
         method: 'get',
         action: "getArticles",
         callback: function (req, res) {
-            Article.find({}).populate('category').exec(function (err, articles) {
+            Article.find({}).populate('tag').exec(function (err, articles) {
                 if (err) {
                     res.json({code: -1, data: []});
                 }

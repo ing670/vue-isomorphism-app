@@ -9,13 +9,13 @@
  */
 var mongoose = require('../database/db');
 var Schema = mongoose.Schema;
-var categoryJson = {
+var tagJson = {
     'title':{
         type: 'String',
     },
     'createTime':{type:'String', default: new Date().getTime() }
 };
-var categorySchema =  new Schema(categoryJson);
+var tagSchema =  new Schema(tagJson);
 // userSchema.pre('save',function(next){
 //     var user = this;
 //     if (!user.isModified('password')) return next();
@@ -29,5 +29,5 @@ var categorySchema =  new Schema(categoryJson);
 //     });
 // });
 
-var Category=mongoose.model('Category', categorySchema);
-module.exports =Category;
+var Tag=mongoose.model('Tag', tagSchema);
+module.exports =Tag;

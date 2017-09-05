@@ -1,48 +1,25 @@
 <template>
 <!--<div>-->
         <div class="post-page" v-if="$store.state.user.info">
-        <div class="post-page-category-list">
+        <div class="post-page-menu-list">
             <div class="logo-wrap">
                 <router-link to="/" exact>
                     <img class="logo" src="../../public/avatar.jpg" alt="logo">
                 </router-link>
             </div>
-            <div class="post-page-category-list-item">
-                <IconText @click="toPostPage" class="user-after-login-post" text="分类" fontCode="e145"
-                          position="right"></IconText>
+            <div class="post-page-menu-list-item">
+                <IconText  class="user-after-login-post" text="文章" fontCode="e145"
+                          position="bottom"></IconText>
             </div>
-            <div class="post-page-category-list-item-child">
-                <ul>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
+            <div class="post-page-menu-list-item">
+                <IconText  class="user-after-login-post" text="标签" fontCode="e145"
+                          position="bottom"></IconText>
+            </div>
+            <div class="post-page-menu-list-item">
+                <IconText  class="user-after-login-post" text="图库" fontCode="e145"
+                           position="bottom"></IconText>
+            </div>
 
-                </ul>
-            </div>
-            <div class="post-page-category-list-item">
-                <IconText @click="toPostPage" class="user-after-login-post" text="标签" fontCode="e145"
-                          position="right"></IconText>
-            </div>
-            <div class="post-page-category-list-item-child">
-                <ul>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
-                    <li>
-                        <span>啊</span><span>20</span>
-                    </li>
-
-                </ul>
-            </div>
         </div>
         <div class="post-page-article-list">
 
@@ -152,11 +129,14 @@
         bottom: 0;
         width: 100%;
         display: flex;
-        .post-page-category-list ,.post-page-article-list{
-            width: 170px;
-            min-width: 170px;
+        .post-page-menu-list{
+            width: 80px;
+            min-width: 80px;
             background: #fff;
             border-right: 1px solid @main-border-color;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             .logo-wrap {
                 height: 60px;
                 display: flex;
@@ -164,6 +144,34 @@
                 justify-content: center;
                 border-bottom: 1px solid @main-border-color;
             }
+            .post-page-menu-list-item{
+                margin-top: 50px;
+                height: 50px;
+                width: 50px;
+                border: 1px solid @main-border-color;
+                border-radius: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: @main-text-color;
+                font-size: 12px;
+                &:hover{
+                    background: @main-them-color;
+                    color: #fff;
+                }
+                /*span{*/
+                    /*font-size: 12px;*/
+
+                /*}*/
+
+            }
+        }
+        .post-page-article-list{
+            width: 80px;
+            min-width: 80px;
+            background: #fff;
+            border-right: 1px solid @main-border-color;
+
             .post-page-category-list-item{
                 height: 36px;
                 color: @main-text-color;

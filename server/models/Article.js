@@ -17,7 +17,7 @@ var articleJson = {
         type: 'String',
         required:[true,'请输入内容'],
     },
-    'category': [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+    'tag': [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     'userName': { //用户名
         type: 'String',
     },

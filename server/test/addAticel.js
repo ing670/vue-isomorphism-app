@@ -1,5 +1,5 @@
 var Article = require('../models/Article');
-var Category = require('../models/Category');
+var Category = require('../models/Tag');
 
 var querystring = require('querystring');
 var axios = require('axios');

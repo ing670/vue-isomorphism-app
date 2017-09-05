@@ -1,19 +1,16 @@
 /**
  * Created by sdsd on 2017/8/30.
- * 原创的文章
- * 转载的文章
- * 加精的文章
  */
-var Category = require('../models/Category');
+var Tag = require('../models/Tag');
 
 module.exports = [
     {
-        path: '/category',
+        path: '/tag',
         method: 'post',
-        action: "category",
+        action: "tag",
         callback: function (req, res) {
-            var category = new Category(req.body);
-            category.save(function (err) {
+            var tag = new Tag(req.body);
+            tag.save(function (err) {
                 if (err) {
                     res.json({code: 1002,msg:"添加分类失败"});
                 } else {
@@ -23,14 +20,14 @@ module.exports = [
 
         }
     },
-    //获取文章详情
+    //获取tag详情
     {
-        path: '/category/:id',
+        path: '/tag/:id',
         method: 'get',
-        action: "getCategoryDetail",
+        action: "getTagDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Category.findOne({'_id': req.params.id}, function (err, category) {
+                Tag.findOne({'_id': req.params.id}, function (err, category) {
                     if (!err) {
                         res.json({code: 0, data: category});
                     } else {
@@ -39,7 +36,7 @@ module.exports = [
 
                 })
             } else {
-                Category.find(function (err, categorys) {
+                Tag.find(function (err, categorys) {
                     res.json({code: 0, data: categorys});
                 })
             }
@@ -47,12 +44,12 @@ module.exports = [
         }
     },
     {
-        path: '/category/:id',
+        path: '/tag/:id',
         method: 'delete',
-        action: "deleteCategory",
+        action: "deleteTag",
         callback: function (req, res) {
             if (req.params.id) {
-                Category.deleteOne({'_id': req.params.id}, function (err) {
+                Tag.deleteOne({'_id': req.params.id}, function (err) {
                     if (!err) {
                         res.json({code: 0,data: null, msg: "删除成功"});
                     } else {
@@ -65,12 +62,12 @@ module.exports = [
         }
     },
     {
-        path: '/category/:id',
+        path: '/tag/:id',
         method: 'patch',
-        action: "updateCategory",
+        action: "updateTag",
         callback: function (req, res) {
             if (req.params.id) {
-                Category.findOneAndUpdate({'_id': req.params.id},req.body, function (err, category) {
+                Tag.findOneAndUpdate({'_id': req.params.id},req.body, function (err, category) {
                     if (!err) {
                         res.json({code: 0,data: category, msg: "更新成功"});
                     } else {
@@ -84,11 +81,11 @@ module.exports = [
     },
     //获取所有分类
     {
-        path: '/categorys',
+        path: '/tag',
         method: 'get',
-        action: "getCategorys",
+        action: "getTag",
         callback: function (req, res) {
-            Category.find(function (err, categorys) {
+            Tag.find(function (err, categorys) {
                 if (err) {
                     res.json({code: -1, data: []});
                 }

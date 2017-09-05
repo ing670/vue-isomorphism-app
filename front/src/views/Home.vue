@@ -4,7 +4,7 @@
             <nav class="home-content-nav">
                 <span>热门文章</span>
                 <ul>
-                    <li v-for="item in $store.state.home.categorys" :key="item._id"><a href="javascript:void(0);">{{item.title}}</a></li>
+                    <li v-for="item in $store.state.home.tags" :key="item._id"><a href="javascript:void(0);">{{item.title}}</a></li>
                 </ul>
             </nav>
             <div class="home-item-wrap" @click="itemClick(it)" v-for="it in $store.state.home.lists" :key="it._id">
@@ -18,8 +18,9 @@
                         <h3>{{it.title}}</h3>
                     </div>
                     <div class="home-item-bottom">
-                        <a href="javascript:void(0);">点赞 {{it.likeNum}}</a><a
-                            href="javascript:void(0);">评论 {{it.commentNum}}</a>
+                        <a href="javascript:void(0);">点赞 {{it.likeNum}}</a>
+                        <!--<a-->
+                            <!--href="javascript:void(0);">评论 {{it.commentNum}}</a>-->
                     </div>
                 </div>
                 <div class="home-item-right" :style="'background-image: url('+it.cover+')'">

@@ -7,7 +7,7 @@ var baseUrl=typeof host == "undefined"?global.host:host
 var articel = {
     state: {
         lists: [],
-        categorys: [],
+        tags: [],
         articelDetial: null
     },
     actions: {
@@ -21,13 +21,13 @@ var articel = {
             })
         },
         GET_HOME_DATA: (store, args) => {
-            return Promise.all([store.dispatch("GET_CATEGORYS"), store.dispatch("GET_ARTICELS"),store.dispatch("GET_USER_INFO",args.query.token)])
+            return Promise.all([store.dispatch("GET_TAGS"), store.dispatch("GET_ARTICELS"),store.dispatch("GET_USER_INFO",args.query.token)])
 
         },
-        GET_CATEGORYS: (store, args) => {
+        GET_TAGS: (store, args) => {
             return new Promise((resolve, reject) => {
-                axios.get(baseUrl + '/api/categorys').then(function (res) {
-                    store.commit('UPDATE_CATEGORYS', res.data.data)
+                axios.get(baseUrl + '/api/tag').then(function (res) {
+                    store.commit('UPDATE_TAG', res.data.data)
                     resolve()
                 }).catch(err => console.log(err));
             })
@@ -45,8 +45,8 @@ var articel = {
         UPDATE_ARTICLE_DETAIL:(state, args)=>{
             state.articelDetial = args;
         },
-        UPDATE_CATEGORYS: (state, args) => {
-            state.categorys = args;
+        UPDATE_TAG: (state, args) => {
+            state.tags = args;
         },
         UPDATE_ARTICELS: (state, args) => {
             state.lists = [].concat(args);
