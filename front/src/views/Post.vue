@@ -8,15 +8,15 @@
                 </router-link>
             </div>
             <div class="post-page-menu-list-item">
-                <IconText  class="user-after-login-post" text="文章" fontCode="e145"
+                <IconText  class="user-after-login-post" text="文章" fontCode="e24d"
                           position="bottom"></IconText>
             </div>
             <div class="post-page-menu-list-item">
-                <IconText  class="user-after-login-post" text="标签" fontCode="e145"
+                <IconText  class="user-after-login-post" text="标签" fontCode="e8e6"
                           position="bottom"></IconText>
             </div>
             <div class="post-page-menu-list-item">
-                <IconText  class="user-after-login-post" text="图库" fontCode="e145"
+                <IconText  class="user-after-login-post" text="图库" fontCode="e3ad"
                            position="bottom"></IconText>
             </div>
 
@@ -158,6 +158,9 @@
                 &:hover{
                     background: @main-them-color;
                     color: #fff;
+                }
+                .wk-icon{
+                    font-size: 18px;
                 }
                 /*span{*/
                     /*font-size: 12px;*/
