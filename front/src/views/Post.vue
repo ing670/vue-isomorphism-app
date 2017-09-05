@@ -1,5 +1,5 @@
 <template>
-    <div >
+<!--<div>-->
         <div class="post-page" v-if="$store.state.user.info">
         <div class="post-page-category-list">
             <div class="logo-wrap">
@@ -86,14 +86,14 @@
 
         <main >
 
-            <div class="view">
+            <!--<div class="view">-->
                 <Editor></Editor>
                 <!--<mavon-editor v-model="value"/>-->
-            </div>
+            <!--</div>-->
 
         </main>
         </div>
-    </div>
+<!--</div>-->
 
 </template>
 <script>
@@ -109,7 +109,9 @@
             IconText,
             Editor
         },
-
+        asyncData ({store,route}) {
+            return store.dispatch('GET_USER_INFO',route.query.token)
+        },
         data() {
             return {
                 value: "",
@@ -131,11 +133,11 @@
             }
         },
         created() {
-            this.$store.dispatch("GET_USER_INFO").then(resolve => {
-                if (!this.$store.state.user.info) {
-                    this.$router.replace('/')
-                }
-            })
+//            this.$store.dispatch("GET_USER_INFO").then(resolve => {
+//                if (!this.$store.state.user.info) {
+//                    this.$router.replace('/')
+//                }
+//            })
 
         }
     }

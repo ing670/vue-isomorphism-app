@@ -1,5 +1,8 @@
 /**
  * Created by sdsd on 2017/8/30.
+ * 原创的文章
+ * 转载的文章
+ * 加精的文章
  */
 var Category = require('../models/Category');
 

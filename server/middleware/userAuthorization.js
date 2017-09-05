@@ -5,11 +5,13 @@ module.exports = {
 
     checkLogin: function (req, res, next) {
         let token = req.query.token ? req.query.token : req.headers.authorization
+
         if (token) {
             jwt.verify(token, key, function (err, user) {
-                if (tokenMap[user._id] == token) {
+                if (user&&(tokenMap[user._id] == token)) {
                     //res.json({code:0,data: user});
                     user.token = token;
+                    console.log("user",user)
                     req.loginUser = user;
                     next()
                 } else {
@@ -23,9 +25,13 @@ module.exports = {
     logout: function (req, res, next) {
 
         let token = req.query.token ? req.query.token : req.headers.authorization
+        console.log("deluser",token)
+
         if (token) {
             jwt.verify(token, key, function (err, user) {
-                if (tokenMap[user._id] == token) {
+                console.log("deluser",user)
+
+                if (user&&(tokenMap[user._id] == token)) {
                     delete tokenMap[user._id]
                     next()
                 } else {

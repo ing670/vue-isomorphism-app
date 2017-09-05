@@ -47,9 +47,8 @@
         methods: {
             login(){
               this.$store.dispatch("LOGIN",{userName:this.userName,passWord:this.passWord}).then(()=>{
-                  console.log(this.$store.state.user.info)
                   if(this.$store.state.user.info){
-                      location.replace(location.href+'?token='+this.$store.state.user.info.token)
+                      location.replace(host+'/'+'?token='+this.$store.state.user.info.token)
                   }
               })
             },

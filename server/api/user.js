@@ -42,7 +42,6 @@ module.exports = [
                     //let token = jwt.sign({exp: Math.floor(Date.now() / 1000) + (60 * 60),data:user}, '*ing670*');
                     userInfo.token = token;
                     tokenMap[userInfo._id] = token;
-                    console.log(tokenMap)
                     return res.json({code:0,data: userInfo});
                 });
             })(req, res, next);

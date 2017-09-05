@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%">
+    <div class="editor-wrap">
         <MarkdownEditor v-model="value" :options="options" height="100%">    </MarkdownEditor>
     </div>
 </template>
@@ -30,6 +30,9 @@
     }
 </script>
 <style lang="less">
+    .editor-wrap{
+        height: 100%;
+    }
     .editor {
         height: 680px;
     }

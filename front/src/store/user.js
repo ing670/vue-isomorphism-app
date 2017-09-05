@@ -24,9 +24,11 @@ export default {
                 })
             })
         },
-        LOGOUT(store) {
+        LOGOUT(store,token) {
             return new Promise((resolve, reject) => {
-                axios.get(`${baseUrl}/api/logOut`).then((res) => {
+                axios.get(`${baseUrl}/api/logOut`,{
+                    params: {token: token}
+                }).then((res) => {
                     store.commit('UPDATE_USER_INFO', null)
                     resolve()
                 })

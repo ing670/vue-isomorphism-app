@@ -60,12 +60,12 @@
                 this.showMenu=false
             },
             logOut() {
-                this.$store.dispatch("LOGOUT").then(() => {
+                this.$store.dispatch("LOGOUT",this.$route.query.token).then(() => {
                     this.$store.state.user.info || (this.showMenu = false)
                 })
             },
             toPostPage(){
-                this.$router.push("/post")
+                this.$router.push(`/post?token=${this.$route.query.token}`)
             }
         },
         mounted() {
