@@ -235,7 +235,7 @@
                 color: @main-text-color;
                 font-size: 12px;
                 &:hover {
-                    background: @main-them-color;
+                    background: @main-them-hover-color;
                     color: #fff;
                 }
                 .wk-icon {

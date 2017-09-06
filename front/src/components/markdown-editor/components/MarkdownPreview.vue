@@ -4,7 +4,7 @@
 
 <script>
     import markdownIt from 'markdown-it'
-    import markdownItTocAndAnchor from "markdown-it-toc-and-anchor"
+    import markdownItTocAndAnchor from "../../markdown-it-toc-and-anchor/dist"
     export default {
         props: ['content', 'options'],
         data () {
@@ -45,8 +45,9 @@
                 }
                 this.markdownit = markdownIt(options).use(markdownItTocAndAnchor, {
                     anchorLink: false,
+                    toc:false,
                     tocCallback: function (tocMarkdown, tocArray, tocHtml) {
-                        console.log(tocArray)
+                        console.log(tocHtml)
                     }
                 })
                 this.renderIt()
