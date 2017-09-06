@@ -1,6 +1,6 @@
 <template>
     <div class="editor-wrap">
-        <MarkdownEditor v-model="value" :options="options" height="100%">    </MarkdownEditor>
+        <MarkdownEditor v-model="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
     </div>
 </template>
 <script>
@@ -11,7 +11,7 @@
     export default {
         data() {
             return {
-                value: '@[toc] # 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n',
+                value: '@[toc]   \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n',
                 options: {
                     highlight (str, lang) { // you can add highlightjs plugin to highlight your code
                         if (lang && hljs.getLanguage(lang)) {
@@ -20,7 +20,11 @@
                             } catch (__) {}
                         }
                         return ''
-                    }
+                    },
+
+                },
+                upload:{
+                    url:host+'/api/upload'
                 }
             }
         },

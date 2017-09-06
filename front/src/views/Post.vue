@@ -37,8 +37,13 @@
         </div>
 
         <main>
+            <div class="post-page-ed-header">
             <div class="post-page-ed-title">
+
                 <lable>标题</lable><input type="text" placeholder="请输入标题" value="">
+
+            </div>
+            <div class="post-page-add-button">发布</div>
             </div>
             <div class="post-page-ed-tag">
                 <span>tag1</span><span>tag1</span><span>tag1</span>
@@ -50,7 +55,7 @@
                 </ul>
                 </div>
             </div>
-            <Editor></Editor>
+            <Editor ></Editor>
         </main>
     </div>
 
@@ -111,39 +116,72 @@
         bottom: 0;
         width: 100%;
         display: flex;
+        .post-page-add-button{
+            background: @main-them-hover-color;
+            width: 50px;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            &:hover{
+                color: #fff;
+                background: @main-them-color;
+            }
+        }
         .post-page-ed-tag-auto-complete{
             position: relative;
             ul{
                 position: absolute;
                 background: #fff;
-                z-index: 999;
+                z-index: 1;
                 width: 120px;
                 color: @main-text-color;
                 padding: @main-margin;
                 border: 1px solid @main-border-color;
                 border-radius: 4px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 li{
-                    margin-bottom: @main-margin;
+                    cursor: pointer;
+                    margin-bottom: 5px;
+                    padding-bottom: 5px;
+                    padding-left: 5px;
+                    border-bottom: 1px solid @main-border-color;
+                    &:hover{
+                        background: @main-them-hover-color;
+                        color: #fff;
+                    }
                     &:last-child{
                         margin-bottom: 0;
                     }
                 }
             }
         }
-        .post-page-ed-title{
+        .post-page-ed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 @main-block-margin;
+            border-bottom: 1px solid @main-border-color;
             height: 60px;
             min-height: 60px;
-            display: flex;
-            align-items: center;
-            padding-left: @main-block-margin;
-            border-bottom: 1px solid @main-border-color;
             background: #fff;
-            input{
-                margin-left: @main-block-margin;
-                border: none;
-                height: 100%;
-                width: 80%;
-                outline-style: none;
+
+            .post-page-ed-title {
+                display: flex;
+                align-items: center;
+                flex: 1;
+                input {
+                    margin-left: @main-block-margin;
+                    border: none;
+                    height: 100%;
+                    width: 80%;
+                    outline-style: none;
+                }
             }
         }
         .post-page-ed-tag{
@@ -215,16 +253,7 @@
             min-width: 240px;
             background: #fff;
             border-right: 1px solid @main-border-color;
-            .post-page-add-button{
-                background: @main-them-color;
-                width: 50px;
-                color: #fff;
-                text-align: center;
-                border-radius: 2px;
-                height: 20px;
-                line-height: 20px;
-                font-size: 12px;
-            }
+
             .post-page-article-list-header {
                 height: 60px;
                 border-bottom: 1px solid @main-bg-color;
