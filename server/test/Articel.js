@@ -5,22 +5,34 @@ var axios = require('axios');
 var baseUrl = 'http://localhost:8080';
 
 var http = require('http');
+var User = require('../models/User');
+
 var Article = require('../models/Article');
+
 var querystring = require('querystring');
 
-var article = new Article({
-    'state': 0,//是否验证通过的用户
-    'title': "标题",
-    'content': "内容",
-    'category': ['默认', '热门', "推荐"],
-    'userName': '刘清灵',
-    'userIcon': 'http://upload.jianshu.io/collections/images/47/%E9%A6%96%E9%A1%B5%E6%8A%95%E7%A8%BF.png?imageMogr/thumbnail/180x180',
-    'cover': "http://upload-images.jianshu.io/upload_images/1225251-6c8621d1df4d8198.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
-    'likeNum': 24,
-    'commentNum': 0,
-    'readNum': 0,
-    'createTime': Date.now()
-});
+// var article = new Article({
+//     'state': 0,//是否验证通过的用户
+//     'title': "标题2",
+//     'content': "内容",
+//     'tag': ['默认', '热门', "推荐"],
+//     'userName': '刘清灵',
+//     'userIcon': 'http://upload.jianshu.io/collections/images/47/%E9%A6%96%E9%A1%B5%E6%8A%95%E7%A8%BF.png?imageMogr/thumbnail/180x180',
+//     'cover': "http://upload-images.jianshu.io/upload_images/1225251-6c8621d1df4d8198.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+//     'likeNum': 24,
+//     'userId':"59a528ee76b03c6351746b09",
+//     'commentNum': 0,
+//     'readNum': 0,
+//     'createTime': Date.now()
+// });
+Article.find({author:"59b0c3f339b75522048d4590"}).populate('tag').populate('author','name age').exec(function (err, articles) {
+  console.log(articles);
+})
+// article.save(function (err) {
+//     console.log(err)
+// });
+
+
 //增加
 // for (var i = 0 ;i<200;i++){
 //     article.title+=i;

@@ -4,12 +4,13 @@
 
 <script>
     import markdownIt from 'markdown-it'
-    import markdownItTocAndAnchor from "../../markdown-it-toc-and-anchor/dist"
+    import markdownItTocAndAnchor from "../../markdown-it-toc-and-anchor"
     export default {
         props: ['content', 'options'],
         data () {
             return {
-                html: ''
+                html: '',
+                dir:'',
             }
         },
         watch: {
@@ -37,17 +38,17 @@
             },
             initMarkdown () {
                 let options = {
-                    html: true,
+                    html: false,
                     breaks: true,
                     linkify: true,
-                    typography: true,
+                    typography: false,
                     ...this.options
                 }
                 this.markdownit = markdownIt(options).use(markdownItTocAndAnchor, {
                     anchorLink: false,
                     toc:false,
-                    tocCallback: function (tocMarkdown, tocArray, tocHtml) {
-                        console.log(tocHtml)
+                    tocCallback:  (tocMarkdown, tocArray, tocHtml)=>{
+                       this.$emit('change-toc',tocHtml)  ;
                     }
                 })
                 this.renderIt()

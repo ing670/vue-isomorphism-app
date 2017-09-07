@@ -6,6 +6,7 @@
  */
 // var bcrypt = require('bcrypt');
 var mongoose = require('../database/db');
+// var User = require('./User');
 var Schema = mongoose.Schema;
 var articleJson = {
     'state':0,//0:未发表 1:已经发表
@@ -17,13 +18,8 @@ var articleJson = {
         type: 'String',
         required:[true,'请输入内容'],
     },
-    'tag': [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
-    'userName': { //用户名
-        type: 'String',
-    },
-    'userIcon': { //用户头像
-        type: 'String',
-    },
+    'tags': [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+    'author':{ type: Schema.Types.ObjectId, ref: 'User' },
     'cover': { //文章封面
         type: 'String',
     },

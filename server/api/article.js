@@ -2,6 +2,7 @@
  * Created by sdsd on 2017/8/30.
  */
 var Article = require('../models/Article');
+let userAuth=require('../middleware/userAuthorization')
 
 module.exports = [
     {
@@ -27,7 +28,7 @@ module.exports = [
         action: "getArticleDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Article.findOne({'_id': req.params.id}).populate('tag').exec(function (err, article) {
+                Article.findOne({'_id': req.params.id}).populate('tag').populate('author').exec(function (err, article) {
                     if (!err) {
                         res.json({code: 0, data: article});
                     } else {
@@ -87,12 +88,27 @@ module.exports = [
         method: 'get',
         action: "getArticles",
         callback: function (req, res) {
-            Article.find({}).populate('tag').exec(function (err, articles) {
-                if (err) {
-                    res.json({code: -1, data: []});
-                }
-                res.json({code: 0, data: articles});
-            })
+                Article.find({}).populate('tag').populate('author','name avatar').exec(function (err, articles) {
+                    if (err) {
+                        res.json({code: -1, data: []});
+                    }
+                    res.json({code: 0, data: articles});
+                })
+            }
+    },{
+        path: '/myArticles',
+        method: 'get',
+        action: "getArticles",
+        mid:userAuth.checkLogin,
+        callback: function (req, res) {
+            if(req.loginUser){
+                Article.find({author:req.loginUser._id}).populate('tag').populate('author','name avatar').exec(function (err, articles) {
+                    if (err) {
+                        res.json({code: -1, data: []});
+                    }
+                    res.json({code: 0, data: articles});
+                })
+            }
         }
     }
 ]

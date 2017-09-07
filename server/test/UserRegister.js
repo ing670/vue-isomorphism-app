@@ -14,7 +14,7 @@ var baseUrl = 'http://localhost:3000';
 //     });
 // })
 axios.post(baseUrl+'/api/register',{
-    userName: "ing6700",
+    userName: "ing670",
     passWord: "123456",
     captcha: "123456",
     phone:"13249726272",

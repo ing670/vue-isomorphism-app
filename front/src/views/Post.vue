@@ -12,6 +12,10 @@
                           position="bottom"></IconText>
             </div>
             <div class="post-page-menu-list-item">
+                <IconText text="草稿" fontCode="e24d"
+                          position="bottom"></IconText>
+            </div>
+            <div class="post-page-menu-list-item">
                 <IconText text="标签" fontCode="e8e6"
                           position="bottom"></IconText>
             </div>
@@ -22,41 +26,61 @@
         </div>
         <div class="post-page-article-list">
             <div class="post-page-article-list-header">
-                <IconText class="user-after-login-post" text="文章" fontCode="e24d"
+                <IconText class="post-page-icon-text post-page-list-icon-text" text="文章" fontCode="e24d"
                           position="left"></IconText>
                 <div class="post-page-add-button">添加</div>
             </div>
             <div class="post-page-article-list-item-wrap">
-            <div :class='i===1?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"' v-for="i in 2">
-                <h4>文章标题</h4>
-                <div class="post-page-article-list-item-time">2017/02/03 10:02:22</div>
-                <div class="post-page-article-list-item-content">123123112312312312312312321312321312321312321321312</div>
-            </div>
+                <div :class='i===1?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"'
+                     v-for="i in 2">
+                    <h4>文章标题</h4>
+                    <div class="post-page-article-list-item-time">2017/02/03 10:02:22</div>
+                    <div class="post-page-article-list-item-content">
+                        123123112312312312312312321312321312321312321321312
+                    </div>
+                </div>
 
             </div>
         </div>
 
         <main>
             <div class="post-page-ed-header">
-            <div class="post-page-ed-title">
+                <div class="post-page-ed-title">
 
-                <lable>标题</lable><input type="text" placeholder="请输入标题" value="">
+                    <lable>标题</lable>
+                    <input type="text" placeholder="请输入标题" value="">
 
-            </div>
-            <div class="post-page-add-button">发布</div>
+                </div>
+                <div class="post-page-save-button">保存</div>
+                <div class="post-page-pub-button">发布</div>
             </div>
             <div class="post-page-ed-tag">
                 <span>tag1</span><span>tag1</span><span>tag1</span>
                 <div class="post-page-ed-tag-auto-complete">
-                <input type="text" value="">
-                <ul class="post-page-ed-tag-list">
-                    <li>tag1</li>
-                    <li>tag2</li>
-                </ul>
+                    <input type="text" value="">
+                    <ul class="post-page-ed-tag-list" style="display: none">
+                        <li>tag1</li>
+                        <li>tag2</li>
+                    </ul>
                 </div>
             </div>
-            <Editor ></Editor>
+            <div class="post-page-ed-cover">
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <Editor ref="editor" @toc-change="getToc"></Editor>
         </main>
+        <div class="post-page-dir-list">
+            <div class="post-page-article-list-header">
+                <IconText class="post-page-icon-text" text="文章目录" fontCode="e8d2"
+                          position="left"></IconText>
+            </div>
+            <div v-html="dir" class="post-page-dir-list-item-wrap markdown-body">
+            </div>
+        </div>
     </div>
 
 </template>
@@ -74,16 +98,21 @@
             Editor
         },
         asyncData({store, route}) {
-            return store.dispatch('GET_USER_INFO', route.query.token)
+            return Promise.all[store.dispatch('GET_USER_INFO', route.query.token), store.dispatch('GET_MY_ARTICLES', route.query.token)]
         },
         data() {
             return {
                 value: "",
                 avatar: avatar,
-                showMenu: false
+                showMenu: false,
+                dir:'',
             }
         },
         methods: {
+            getToc(toc){
+                console.log(toc)
+                this.dir = toc
+            },
             hideMenu() {
                 this.showMenu = false
             },
@@ -116,7 +145,7 @@
         bottom: 0;
         width: 100%;
         display: flex;
-        .post-page-add-button{
+        .post-page-pub-button, .post-page-save-button, .post-page-add-button {
             background: @main-them-hover-color;
             width: 50px;
             color: #fff;
@@ -126,14 +155,17 @@
             line-height: 20px;
             font-size: 12px;
             cursor: pointer;
-            &:hover{
+            &:hover {
                 color: #fff;
                 background: @main-them-color;
             }
         }
-        .post-page-ed-tag-auto-complete{
+        .post-page-pub-button {
+            margin-left: @main-margin;
+        }
+        .post-page-ed-tag-auto-complete {
             position: relative;
-            ul{
+            ul {
                 position: absolute;
                 background: #fff;
                 z-index: 1;
@@ -145,17 +177,17 @@
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                li{
+                li {
                     cursor: pointer;
                     margin-bottom: 5px;
                     padding-bottom: 5px;
                     padding-left: 5px;
                     border-bottom: 1px solid @main-border-color;
-                    &:hover{
+                    &:hover {
                         background: @main-them-hover-color;
                         color: #fff;
                     }
-                    &:last-child{
+                    &:last-child {
                         margin-bottom: 0;
                     }
                 }
@@ -184,7 +216,36 @@
                 }
             }
         }
-        .post-page-ed-tag{
+        .post-page-ed-cover {
+            height: 200px;
+            min-height: 200px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            > div {
+                cursor: pointer;
+                position: relative;
+                height: 100px;
+                width: 160px;
+                border: 2px dashed @main-bg-color;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                overflow: hidden;
+                div {
+                    position: absolute;
+                    width: 30%;
+                    height: 2px;
+                    background: @main-bg-color;
+                    &:last-child {
+                        transform: rotate(90deg);
+                    }
+                }
+            }
+        }
+        .post-page-ed-tag {
             min-height: 30px;
             height: 30px;
             display: flex;
@@ -192,13 +253,13 @@
             padding-left: @main-block-margin;
             border-bottom: 1px solid @main-bg-color;
             background: #fff;
-            input{
+            input {
                 border: none;
                 outline-style: none;
                 font-size: 12px;
-              //  background: @main-bg-color;
+                //  background: @main-bg-color;
             }
-            span{
+            span {
                 padding: 2px 4px;
                 font-size: 12px;
                 color: #fff;
@@ -248,7 +309,19 @@
 
             }
         }
-        .post-page-article-list {
+        .post-page-dir-list-item-wrap{
+            padding: @main-block-margin 0;
+            ul{
+                padding-left: 15px;
+                li{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+        }
+        .post-page-article-list, .post-page-dir-list {
             width: 240px;
             min-width: 240px;
             background: #fff;
@@ -264,36 +337,36 @@
                 align-items: center;
                 padding: 0 @main-block-margin;
             }
-            .post-page-article-list-item-wrap{
+            .post-page-article-list-item-wrap {
                 padding: 0 @main-block-margin;
             }
-            .post-page-article-list-item-active{
+            .post-page-article-list-item-active {
                 position: relative;
-                h4{
+                h4 {
                     color: @main-them-color;
                 }
 
             }
-            .post-page-article-list-item-active::before{
+            .post-page-article-list-item-active::before {
                 position: absolute;
                 width: 3px;
                 height: 100%;
-                top:0;
+                top: 0;
                 left: -10px;
-                content:'';
+                content: '';
                 background: @main-them-color;
             }
-            .post-page-article-list-item{
+            .post-page-article-list-item {
                 margin-top: @main-block-margin;
                 padding-bottom: @main-margin;
                 border-bottom: 1px solid @main-border-color;
-                h4{
+                h4 {
                     width: 120px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                 }
-                .post-page-article-list-item-content{
+                .post-page-article-list-item-content {
                     font-size: 14px;
                     color: @main-text-color;
                     max-height: 48px;
@@ -301,12 +374,18 @@
                     word-break: break-all;
                     overflow: hidden;
                 }
-                .post-page-article-list-item-time{
+                .post-page-article-list-item-time {
                     font-size: 12px;
-                    padding:  5px 0;
+                    padding: 5px 0;
                     color: @main-text-color;
                 }
             }
+        }
+        .post-page-dir-list {
+            width: 240px;
+            min-width: 240px;
+            background: #fff;
+            border-left: 1px solid @main-border-color;
         }
 
         .logo {
@@ -324,82 +403,83 @@
             flex: 1;
         }
 
-        .user-wrap {
-            position: relative;
-            .user-after-login {
-                display: flex;
-                align-items: center;
-                .user-after-login-post {
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    span {
-                        color: @main-text-color;
-                        &:last-child{
-                            font-size: 18px;
-                            margin-left: 5px;
-                        }
-                    }
-                    .wk-icon {
-                        font-size: 32px;
-                        color: @main-them-color;
-
-                    }
+        .post-page-icon-text {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            span {
+                color: @main-text-color;
+                &:last-child {
+                    font-size: 18px;
+                    padding-left: 5px;
                 }
             }
-            .user-feature {
-                position: absolute;
-                z-index: 1;
-                background: #fff;
-                border: 1px solid @main-border-color;
-                padding: 10px;
-                right: 0;
-                li {
-                    margin-bottom: 8px;
-                    text-align: right;
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                    a {
-                        width: 100%;
-                    }
-                }
+            .wk-icon {
+                font-size: 24px;
+                color: @main-them-color;
+
             }
         }
-
-        .header {
-            background: #fff;
-            .user-action {
-                height: 100%;
-                span {
-                    padding: 0 5px;
-                }
+        .post-page-list-icon-text {
+            .wk-icon {
+                color: @main-text-color;
             }
-            .avatar {
-                height: 40px;
-            }
-
-            height: 60px;
-            border-bottom: 1px solid @main-border-color;
-            .inner {
-                height: 60px;
-                width: 960px;
-                margin: 0 auto;
-                justify-content: space-between;
-                display: flex;
-                align-items: center;
-                .inner-nav {
-                    flex: 1;
-                }
-                a {
-                    padding: 0 15px;
-                    min-width: 60px;
-                    text-align: center;
-                    color: @main-text-color;
-                    text-decoration: none
-                }
-            }
-
         }
     }
+
+    .user-feature {
+        position: absolute;
+        z-index: 1;
+        background: #fff;
+        border: 1px solid @main-border-color;
+        padding: 10px;
+        right: 0;
+        li {
+            margin-bottom: 8px;
+            text-align: right;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            a {
+                width: 100%;
+            }
+        }
+    }
+
+    .header {
+        background: #fff;
+        .user-action {
+            height: 100%;
+            span {
+                padding: 0 5px;
+            }
+        }
+        .avatar {
+            height: 40px;
+        }
+
+        height: 60px;
+        border-bottom: 1px solid @main-border-color;
+        .inner {
+            height: 60px;
+            width: 960px;
+            margin: 0 auto;
+            justify-content: space-between;
+            display: flex;
+            align-items: center;
+            .inner-nav {
+                flex: 1;
+            }
+            a {
+                padding: 0 15px;
+                min-width: 60px;
+                text-align: center;
+                color: @main-text-color;
+                text-decoration: none
+            }
+        }
+
+    }
+
+
 </style>

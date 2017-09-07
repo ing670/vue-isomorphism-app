@@ -45,7 +45,7 @@ var userJson = {
             message: '{VALUE} 您的电子邮件格式不正确'
         }
     },
-    avatar:{
+    'avatar':{
         type: 'String'
     },
     'createTime':{type:'String', default: new Date().getTime() }

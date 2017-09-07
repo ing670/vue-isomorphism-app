@@ -1,6 +1,6 @@
 <template>
     <div class="editor-wrap">
-        <MarkdownEditor v-model="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
+        <MarkdownEditor @change-toc="tocChange"v-model="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
     </div>
 </template>
 <script>
@@ -26,6 +26,12 @@
                 upload:{
                     url:host+'/api/upload'
                 }
+            }
+        },
+        methods:{
+            tocChange(val){
+                console.log("fuck",val)
+                this.$emit('toc-change',val)
             }
         },
         components: {

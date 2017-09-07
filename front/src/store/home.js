@@ -21,7 +21,7 @@ var articel = {
             })
         },
         GET_HOME_DATA: (store, args) => {
-            return Promise.all([store.dispatch("GET_TAGS"), store.dispatch("GET_ARTICELS"),store.dispatch("GET_USER_INFO",args.query.token)])
+            return Promise.all([store.dispatch("GET_TAGS"), store.dispatch("GET_ARTICLES"),store.dispatch("GET_USER_INFO",args.query.token)])
 
         },
         GET_TAGS: (store, args) => {
@@ -32,24 +32,26 @@ var articel = {
                 }).catch(err => console.log(err));
             })
         },
-        GET_ARTICELS: (store, args) => {
+        GET_ARTICLES: (store, args) => {
             return new Promise((resolve, reject) => {
                 axios.get(baseUrl + '/api/articles').then(function (res) {
-                    store.commit('UPDATE_ARTICELS', res.data.data)
+                    store.commit('UPDATE_ARTICLES', res.data.data)
                     resolve()
                 }).catch(err => console.log(err));
             })
-        }
+        },
+
     },
     mutations: {
+
         UPDATE_ARTICLE_DETAIL:(state, args)=>{
             state.articelDetial = args;
         },
         UPDATE_TAG: (state, args) => {
             state.tags = args;
         },
-        UPDATE_ARTICELS: (state, args) => {
-            state.lists = [].concat(args);
+        UPDATE_ARTICLES: (state, args) => {
+            state.lists = args?[].concat(args):[];
         }
     }
 

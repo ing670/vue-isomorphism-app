@@ -25,7 +25,7 @@
         .preview-tool(ref="preTool")
           .allow-wrapper(@click.stop="showPreview = !showPreview")
             .allow(:class="{'allow-right':showPreview, 'allow-left':!showPreview}")
-        preview(ref="preview", :content="content", :options="options", v-show="showPreview", :style="{width: previewWidth}")
+        preview(ref="preview", @change-toc="getToc", :content="content", :options="options", v-show="showPreview", :style="{width: previewWidth}")
     .hotkey-remind(v-show="hotkeyRemind.show", :style="{top: hotkeyRemind.top, left: hotkeyRemind.left}") {{hotkeyRemind.text}}
     transition(enter-active-class="fade in" leave-active-class="fade out")
       .markdown__editor-status(:class="statusMessage.type", v-show="statusMessage.show") {{statusMessage.text}}
@@ -72,7 +72,6 @@ export default {
   computed: {
     realHeight () {
       if (this.fullScreen) return '100%'
-        console.log(this.height)
       return this.height
     },
     canUndo () {
@@ -107,6 +106,9 @@ export default {
     }
   },
   methods: {
+      getToc(val){
+          this.$emit("change-toc",val)
+      },
     pasteEvent (event) {
       var items = (event.clipboardData || event.originalEvent.clipboardData).items
       for (let index in items) {
