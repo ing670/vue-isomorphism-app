@@ -9,13 +9,18 @@ module.exports = [
         path: '/article',
         method: 'post',
         action: "article",
+        mid:userAuth.checkLogin,
         callback: function (req, res) {
-            var article = new Article(req.body);
-            article.save(function (err) {
+            req.body.likeNum=0;
+            req.body.commentNum=0;
+            req.body.readNum=0;
+            req.body.author=req.loginUser._id
+            let article = new Article(req.body);
+            article.save(function (err,article) {
                 if (err) {
                     res.json({code: 1002,msg:"添加文章失败"});
                 } else {
-                    res.json({code: 0});
+                    res.json({code: 0,data:article});
                 }
             });
 
@@ -102,7 +107,7 @@ module.exports = [
         mid:userAuth.checkLogin,
         callback: function (req, res) {
             if(req.loginUser){
-                Article.find({author:req.loginUser._id}).populate('tag').populate('author','name avatar').exec(function (err, articles) {
+                Article.find({author:req.loginUser._id}).populate('tag').populate('author','name avatar').sort({'_id':'-1'}).exec(function (err, articles) {
                     if (err) {
                         res.json({code: -1, data: []});
                     }

@@ -22,7 +22,6 @@ var articel = {
         },
         GET_HOME_DATA: (store, args) => {
             return Promise.all([store.dispatch("GET_TAGS"), store.dispatch("GET_ARTICLES"),store.dispatch("GET_USER_INFO",args.query.token)])
-
         },
         GET_TAGS: (store, args) => {
             return new Promise((resolve, reject) => {

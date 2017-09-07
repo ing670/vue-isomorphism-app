@@ -28,15 +28,15 @@
             <div class="post-page-article-list-header">
                 <IconText class="post-page-icon-text post-page-list-icon-text" text="文章" fontCode="e24d"
                           position="left"></IconText>
-                <div class="post-page-add-button">添加</div>
+                <div @click="addArticle" class="post-page-add-button">添加</div>
             </div>
             <div class="post-page-article-list-item-wrap">
-                <div :class='i===1?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"'
-                     v-for="i in 2">
-                    <h4>文章标题</h4>
-                    <div class="post-page-article-list-item-time">2017/02/03 10:02:22</div>
+                <div @click="itemClick(it,index)" :key="it._id" :class='index===currentArticleIndex?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"'
+                     v-for="(it,index)  in $store.state.post.myList">
+                    <h4>{{it.title}}</h4>
+                    <div class="post-page-article-list-item-time">{{formatTime(it.createTime)}}</div>
                     <div class="post-page-article-list-item-content">
-                        123123112312312312312312321312321312321312321321312
+                        {{it.content}}
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
     const inBrowser = typeof window !== 'undefined';
     import avatar from '../../public/avatar.jpg'
     import IconText from '../components/icontext/index.vue'
-
+    import moment from '../util/time'
     const Editor = () => inBrowser ? import('../components/Editor.vue') : import('../components/Empty.vue')
 
     export default {
@@ -98,19 +98,29 @@
             Editor
         },
         asyncData({store, route}) {
-            return Promise.all[store.dispatch('GET_USER_INFO', route.query.token), store.dispatch('GET_MY_ARTICLES', route.query.token)]
+            return Promise.all([store.dispatch('GET_USER_INFO', route.query.token), store.dispatch('GET_MY_ARTICLES', route.query.token)])
         },
+
         data() {
             return {
                 value: "",
                 avatar: avatar,
                 showMenu: false,
                 dir:'',
+                currentArticleIndex:0
             }
         },
         methods: {
+            addArticle(){
+                store.dispatch('ADD_MY_ARTICLE',this.$route.query.token)
+            },
+            itemClick(article,index){
+                this.currentArticleIndex = index;
+            },
+            formatTime(time){
+                return moment(+time).fromNow()
+            },
             getToc(toc){
-                console.log(toc)
                 this.dir = toc
             },
             hideMenu() {
@@ -126,12 +136,6 @@
             }
         },
         created() {
-//            this.$store.dispatch("GET_USER_INFO").then(resolve => {
-//                if (!this.$store.state.user.info) {
-//                    this.$router.replace('/')
-//                }
-//            })
-
         }
     }
 
@@ -217,8 +221,8 @@
             }
         }
         .post-page-ed-cover {
-            height: 200px;
-            min-height: 200px;
+            height: 140px;
+            min-height: 140px;
             background: #fff;
             display: flex;
             justify-content: center;
@@ -326,7 +330,8 @@
             min-width: 240px;
             background: #fff;
             border-right: 1px solid @main-border-color;
-
+            height: 100%;
+            overflow-y: scroll;
             .post-page-article-list-header {
                 height: 60px;
                 border-bottom: 1px solid @main-bg-color;
@@ -357,6 +362,7 @@
                 background: @main-them-color;
             }
             .post-page-article-list-item {
+                cursor: pointer;
                 margin-top: @main-block-margin;
                 padding-bottom: @main-margin;
                 border-bottom: 1px solid @main-border-color;
@@ -365,6 +371,9 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
+                    &:hover{
+                        color: @main-them-hover-color;
+                    }
                 }
                 .post-page-article-list-item-content {
                     font-size: 14px;

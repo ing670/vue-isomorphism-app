@@ -11,7 +11,6 @@ module.exports = {
                 if (user&&(tokenMap[user._id] == token)) {
                     //res.json({code:0,data: user});
                     user.token = token;
-                    console.log("user",user)
                     req.loginUser = user;
                     next()
                 } else {

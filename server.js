@@ -84,7 +84,6 @@ function render (req, res) {
 
   res.setHeader("Content-Type", "text/html")
   res.setHeader("Server", serverInfo)
-  console.log("ssssss",req.url)
   const handleError = err => {
     if (err.url) {
       res.redirect(err.url)
