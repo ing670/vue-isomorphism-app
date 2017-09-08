@@ -1,18 +1,23 @@
 /**
- * Created by sdsd on 2017/9/7.
+ * Created by ing670 on 2017/9/7.
  */
-/**
- * Created by sdsd on 2017/7/11.
- */
-// import Types from "./motations-types"
+
 import axios from "axios"
 var baseUrl=typeof host == "undefined"?global.host:host
 var articel = {
     state: {
         myList:[],
-        myTags:[],
+        searchTags:[],
+        tags:[]
     },
     actions: {
+        SEARCH_TAG_LIST(store,keyword){
+            return new Promise((resolve,reject)=>{
+                axios.get(baseUrl +`/api/searchTag/${keyword}`).then((res)=>{
+                    res.data.code == 0&&store.commit('UPDATE_SEARCH_TAG_LIST',res.data.data)
+                }).catch(err => console.log(err));
+            })
+        },
         DELETE_MY_ARTICLE(store, {id,token,index}){
             return new Promise((resolve, reject) => {
                 axios.delete(baseUrl + `/api/article/${id}?token=${token}`).then(function (res) {
@@ -64,6 +69,9 @@ var articel = {
         }
     },
     mutations: {
+        UPDATE_SEARCH_TAG_LIST(state,data){
+            state.searchTags  = data;
+        },
         DELETE_MY_ARTICLE(state,index){
             state.myList.splice(index,1)
         },
@@ -82,7 +90,7 @@ var articel = {
             }
         },
         UPDATE_MY_TAG: (state, args) => {
-            state.myTags = args;
+            state.tags = args;
         },
 
     }

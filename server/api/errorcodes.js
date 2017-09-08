@@ -9,6 +9,14 @@ export default  {
     DEL_ARTICLE_FAIL:{code:'1003',msg:"文章删除失败"},
     GET_ARTICLES_FAIL:{code:'1004',msg:"获取文章列表失败"},
     GET_MY_ARTICLES_FAIL:{code:'1005',msg:"获取个人文章列表失败"},
-    GET_ARTICLE_FAIL:{code:'1006',msg:"获取文章详情失败"}
+    GET_ARTICLE_FAIL:{code:'1006',msg:"获取文章详情失败"},
+    GET_TAG_LIST_FAIL:{code:'1007',msg:"获取标签集失败"},
+    UPDATE_TAG_FAIL:{code:'1008',msg:"标签更新失败"},
+    DEL_TAG_FAIL:{code:'1009',msg:"标签删除失败"},
+    GET_TAG_FAIL:{code:'1006',msg:"获取标签详情失败"},
+    SEARCH_TAG_FAIL:{code:'1007',msg:"搜索标签集失败"},
+
+
+
 
 }

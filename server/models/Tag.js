@@ -11,9 +11,14 @@ var mongoose = require('../database/db');
 var Schema = mongoose.Schema;
 var tagJson = {
     'title':{
-        type: 'String',
+        type: String,
+        default:'',
     },
-    'createTime':{type:'String', default: new Date().getTime() }
+    'icon':{
+      type:String,
+      default:''
+    },
+    'createTime':{type:String, default: new Date().getTime() }
 };
 var tagSchema =  new Schema(tagJson);
 // userSchema.pre('save',function(next){

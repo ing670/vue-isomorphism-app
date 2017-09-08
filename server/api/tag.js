@@ -1,8 +1,8 @@
 /**
  * Created by sdsd on 2017/8/30.
  */
-var Tag = require('../models/Tag');
-
+const Tag = require('../models/Tag');
+const ERROR_CODE = require('./errorcodes')
 module.exports = [
     {
         path: '/tag',
@@ -12,7 +12,7 @@ module.exports = [
             var tag = new Tag(req.body);
             tag.save(function (err) {
                 if (err) {
-                    res.json({code: 1002,msg:"添加分类失败"});
+                    res.json({code: 1002, msg: "添加分类失败"});
                 } else {
                     res.json({code: 0});
                 }
@@ -27,17 +27,12 @@ module.exports = [
         action: "getTagDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Tag.findOne({'_id': req.params.id}, function (err, category) {
+                Tag.findOne({'_id': req.params.id}, function (err, tag) {
                     if (!err) {
-                        res.json({code: 0, data: category});
+                        res.json({code: 0, data: tag});
                     } else {
-                        res.json({code: 0, data: {}});
+                        res.json({...ERROR_CODE.GET_TAG_FAIL, data: null});
                     }
-
-                })
-            } else {
-                Tag.find(function (err, categorys) {
-                    res.json({code: 0, data: categorys});
                 })
             }
 
@@ -51,9 +46,9 @@ module.exports = [
             if (req.params.id) {
                 Tag.deleteOne({'_id': req.params.id}, function (err) {
                     if (!err) {
-                        res.json({code: 0,data: null, msg: "删除成功"});
+                        res.json({code: 0, data: null, msg: "删除成功"});
                     } else {
-                        res.json({code: 0, data: null,msg:'删除失败'});
+                        res.json({...ERROR_CODE.DEL_TAG_FAIL, data: null});
                     }
 
                 })
@@ -67,11 +62,11 @@ module.exports = [
         action: "updateTag",
         callback: function (req, res) {
             if (req.params.id) {
-                Tag.findOneAndUpdate({'_id': req.params.id},req.body, function (err, category) {
+                Tag.findOneAndUpdate({'_id': req.params.id}, req.body, function (err, category) {
                     if (!err) {
-                        res.json({code: 0,data: category, msg: "更新成功"});
+                        res.json({code: 0, data: category, msg: "更新成功"});
                     } else {
-                        res.json({code: 0, data: null,msg:'更新失败'});
+                        res.json({...ERROR_CODE.UPDATE_TAG_FAIL, data: null});
                     }
 
                 })
@@ -79,18 +74,57 @@ module.exports = [
 
         }
     },
-    //获取所有分类
     {
-        path: '/tag',
+        path: '/tags',
         method: 'get',
-        action: "getTag",
+        action: "getTags",
         callback: function (req, res) {
-            Tag.find(function (err, categorys) {
+            Tag.find(function (err, tags) {
                 if (err) {
-                    res.json({code: -1, data: []});
+                    res.json({...ERROR_CODE.GET_TAG_LIST_FAIL, data: []});
                 }
-                res.json({code: 0, data: categorys});
+                res.json({code: 0, data: tags});
             })
+        }
+    }, {
+        path: '/searchTag/:keyword',
+        method: 'get',
+        action: "searchTag",
+        callback: function (req, res) {
+            let keyword = req.params.keyword;
+            if (keyword) {
+                const reg = new RegExp(keyword, 'i');
+                Tag.find({
+                    $or: [{'title': {'$regex': reg, $options: '$i'}}],
+                }, function (err, tags) {
+                    if (err) {
+                        res.json({...ERROR_CODE.GET_TAG_LIST_FAIL, data: []});
+                    }
+                    res.json({code: 0, data: tags});
+                })
+            }else{
+                Tag.find(function (err, tags) {
+                    if (err) {
+                        res.json({...ERROR_CODE.GET_TAG_LIST_FAIL, data: []});
+                    }
+                    res.json({code: 0, data: tags});
+                })
+            }
+        }
+    },
+    {
+        path: '/searchTag',
+        method: 'get',
+        action: "searchTag",
+        callback: function (req, res) {
+
+                Tag.find(function (err, tags) {
+                    if (err) {
+                        res.json({...ERROR_CODE.GET_TAG_LIST_FAIL, data: []});
+                    }
+                    res.json({code: 0, data: tags});
+                })
+
         }
     }
 ]

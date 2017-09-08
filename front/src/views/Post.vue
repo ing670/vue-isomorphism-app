@@ -48,10 +48,8 @@
                         {{it.content}}
                     </div>
                 </div>
-
             </div>
         </div>
-
         <main>
             <div class="post-page-ed-header">
                 <div class="post-page-ed-title">
@@ -63,12 +61,11 @@
                 <div class="post-page-pub-button">发布</div>
             </div>
             <div class="post-page-ed-tag">
-                <span>tag1</span><span>tag1</span><span>tag1</span>
-                <div class="post-page-ed-tag-auto-complete">
-                    <input type="text" value="">
-                    <ul class="post-page-ed-tag-list" style="display: none">
-                        <li>tag1</li>
-                        <li>tag2</li>
+                <span v-for="(t,index) in currentArticle.tags">{{t.title}} <Icon @click="delTag(index)" fontCode="e5cd"></Icon></span>
+                <div v-clickoutside="hideSearchTagList" class="post-page-ed-tag-auto-complete">
+                    <input type="text"  v-model="tagValue">
+                    <ul class="post-page-ed-tag-list" :style="'display:'+($store.state.post.searchTags.length>0?'block':'none')">
+                        <li @click="tagClick(tag)" v-for="tag in $store.state.post.searchTags" :key="tag._id">{{tag.title}}</li>
                     </ul>
                 </div>
             </div>
@@ -115,11 +112,19 @@
 
         data() {
             return {
-                value: "",
+                tagValue: "",
                 avatar: avatar,
                 showMenu: false,
                 dir: '',
-                currentArticleIndex: 0
+                currentArticleIndex: 0,
+                displayTagList:true,
+            }
+        },
+        watch:{
+            tagValue(newValue,oldValue){
+                newValue&&setTimeout(()=>{
+                    this.$store.dispatch('SEARCH_TAG_LIST',newValue)
+                },500)
             }
         },
         computed:{
@@ -128,6 +133,17 @@
             }
         },
         methods: {
+            delTag(index){
+                this.currentArticle.tags.splice(index,1)
+            },
+            hideSearchTagList(){
+                this.$store.state.post.searchTags=[];
+            },
+            tagClick(tag){
+                this.currentArticle.tags.push(tag)
+                this.tagValue ="";
+                this.hideSearchTagList();
+            },
             valueChange(val){
                 this.currentArticle.content=val
             },
@@ -195,6 +211,7 @@
         .post-page-ed-tag-auto-complete {
             position: relative;
             ul {
+                top:20px;
                 position: absolute;
                 background: #fff;
                 z-index: 1;
@@ -288,13 +305,28 @@
                 font-size: 12px;
                 //  background: @main-bg-color;
             }
-            span {
+            >span {
                 padding: 2px 4px;
                 font-size: 12px;
                 color: #fff;
                 background: #5cb85c;
                 margin-right: @main-margin;
                 border-radius: 2px;
+                position: relative;
+                .wk-icon{
+                    display: none;
+                    cursor: pointer;
+                    position: absolute;
+                    right: -3px;
+                    top:-5px;
+                    background: @main-them-hover-color;
+                    border-radius: 100%;
+                    color: #fff;
+                    font-size: 12px;
+                }
+                &:hover{
+                    .wk-icon{display: block}
+                }
             }
         }
         .post-page-menu-list {
