@@ -13,11 +13,14 @@ var articel = {
         myTags:[],
     },
     actions: {
-        // GET_POST_DATA(store, route){
-        //     return new Promise((resolve)=>{
-        //         Promise.all([store.dispatch('GET_USER_INFO', route.query.token), store.dispatch('GET_MY_ARTICLES', route.query.token)]).then(()=>resolve())
-        //     })
-        // },
+        DELETE_MY_ARTICLE(store, {id,token,index}){
+            return new Promise((resolve, reject) => {
+                axios.delete(baseUrl + `/api/article/${id}?token=${token}`).then(function (res) {
+                    res.data.code == 0&&store.commit('DELETE_MY_ARTICLE',index)
+                    resolve()
+                }).catch(err => console.log(err));
+            })
+        },
         GET_MY_TAGS: (store, token) => {
             return new Promise((resolve, reject) => {
                 axios.get(baseUrl + `/api/tag?token=${token}`).then(function (res) {
@@ -26,13 +29,22 @@ var articel = {
                 }).catch(err => console.log(err));
             })
         },
+        UPDATE_MY_ARTICLE:(store,params)=>{
+            return new Promise((resolve, reject) => {
+                axios.patch(baseUrl + `/api/article/${params.id}?token=${params.token}`,params.data).then(function (res) {
+                    let data = {data:res.data.data,index:params.index};
+                    store.commit('UPDATE_MY_ARTICLE', data)
+                    resolve()
+                }).catch(err => console.log(err));
+            })
+        },
         ADD_MY_ARTICLE:(store, token)=>{
             return new Promise((resolve, reject) => {
                let at={
+                   'state':0,
                    'title': "无标题",
                    'content': "写点什么呢...",
                    'tags': [],
-                   // 'author':'59b0c3f339b75522048d4590',
                    'cover': "",
                    'createTime': new Date().getTime()
                }
@@ -52,13 +64,22 @@ var articel = {
         }
     },
     mutations: {
+        DELETE_MY_ARTICLE(state,index){
+            state.myList.splice(index,1)
+        },
         ADD_MY_ARTICLES:(state,article)=>{
             state.myList.unshift(article)
         },
-        UPDATE_MY_ARTICLES:(state, args)=>{
-            state.myList = args||[];
-            console.log("dadadadadadadada",state.myList.length)
+        UPDATE_MY_ARTICLE:(state,{data,index})=>{
 
+            Object.assign(state.myList[index],data)
+
+        },
+        UPDATE_MY_ARTICLES:(state, args)=>{
+            if(args&&Array.isArray(args)){
+                state.myList = args
+                console.log("13123123213",JSON.stringify(state.myList))
+            }
         },
         UPDATE_MY_TAG: (state, args) => {
             state.myTags = args;

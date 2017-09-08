@@ -1,6 +1,6 @@
 <template>
     <div class="editor-wrap">
-        <MarkdownEditor @change-toc="tocChange"v-model="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
+        <MarkdownEditor @change-toc="tocChange" @input="input" :value="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
     </div>
 </template>
 <script>
@@ -9,9 +9,15 @@
     import 'highlightjs/styles/github.css'
 
     export default {
+        props:{
+            value:{
+                default:"",
+                type:String
+            }
+        },
+
         data() {
             return {
-                value: '@[toc]   \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n# 1  \n# 2  \n # 3  \n',
                 options: {
                     highlight (str, lang) { // you can add highlightjs plugin to highlight your code
                         if (lang && hljs.getLanguage(lang)) {
@@ -30,8 +36,10 @@
         },
         methods:{
             tocChange(val){
-                console.log("fuck",val)
                 this.$emit('toc-change',val)
+            },
+            input(val){
+               this.$emit("valueChange",val)
             }
         },
         components: {

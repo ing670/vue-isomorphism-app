@@ -33,7 +33,7 @@ module.exports = [
         callback: function (req, res, next) {
             passport.authenticate('local', function(err, user, info) {
                 if (err) { return next(err); }
-                if (!user) { return res.json({code:1001,msg:"登录失败"}); }
+                if (!user) { return res.json({code:1000,msg:"登录失败"}); }
                 req.logIn(user, function(err) {
                     if (err) { return next(err); }
                     let userInfo = user.toJSON();

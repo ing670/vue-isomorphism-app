@@ -9,7 +9,7 @@ var mongoose = require('../database/db');
 // var User = require('./User');
 var Schema = mongoose.Schema;
 var articleJson = {
-    'state':0,//0:未发表 1:已经发表
+    'state':{default:0,type:Number},//0:未发表 1:已经发表
     'title':{ //文章标题
         type: 'String',
         required:[true,'请输入标题'],

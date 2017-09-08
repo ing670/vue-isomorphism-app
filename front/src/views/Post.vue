@@ -31,9 +31,18 @@
                 <div @click="addArticle" class="post-page-add-button">添加</div>
             </div>
             <div class="post-page-article-list-item-wrap">
-                <div @click="itemClick(it,index)" :key="it._id" :class='index===currentArticleIndex?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"'
+                <div @click="itemClick(it,index)" :key="it._id"
+                     :class='index===currentArticleIndex?"post-page-article-list-item-active post-page-article-list-item":"post-page-article-list-item"'
                      v-for="(it,index)  in $store.state.post.myList">
-                    <h4>{{it.title}}</h4>
+                    <div class="post-page-article-list-item-header"><h4>{{it.title}}</h4>
+                        <div class="post-page-article-list-item-header-dropdown-list">
+                            <Icon fontCode="e8b8"></Icon>
+                            <ul>
+                                <li  v-if="it.state==0" @click.stop="updateArticleState(it._id,1,index)">发布</li>
+                                <li  v-if="it.state==1" @click.stop="updateArticleState(it._id,0,index)">撤回</li>
+                                <li @click.stop="deleteArticle(it._id,index)">删除</li>
+                            </ul><!--<span>发布</span><span>撤回</span><span>删除</span>--></div>
+                    </div>
                     <div class="post-page-article-list-item-time">{{formatTime(it.createTime)}}</div>
                     <div class="post-page-article-list-item-content">
                         {{it.content}}
@@ -48,8 +57,7 @@
                 <div class="post-page-ed-title">
 
                     <lable>标题</lable>
-                    <input type="text" placeholder="请输入标题" value="">
-
+                    <input type="text" placeholder="请输入标题" v-model="currentArticle.title">
                 </div>
                 <div class="post-page-save-button">保存</div>
                 <div class="post-page-pub-button">发布</div>
@@ -71,7 +79,7 @@
                 </div>
             </div>
 
-            <Editor ref="editor" @toc-change="getToc"></Editor>
+            <Editor ref="editor" @valueChange="valueChange" :value="currentArticle.content" @toc-change="getToc"></Editor>
         </main>
         <div class="post-page-dir-list">
             <div class="post-page-article-list-header">
@@ -89,13 +97,17 @@
     const inBrowser = typeof window !== 'undefined';
     import avatar from '../../public/avatar.jpg'
     import IconText from '../components/icontext/index.vue'
+    import Icon from '../components/icon/index.vue'
+
+
     import moment from '../util/time'
     const Editor = () => inBrowser ? import('../components/Editor.vue') : import('../components/Empty.vue')
 
     export default {
         components: {
             IconText,
-            Editor
+            Editor,
+            Icon
         },
         asyncData({store, route}) {
             return Promise.all([store.dispatch('GET_USER_INFO', route.query.token), store.dispatch('GET_MY_ARTICLES', route.query.token)])
@@ -106,15 +118,31 @@
                 value: "",
                 avatar: avatar,
                 showMenu: false,
-                dir:'',
-                currentArticleIndex:0
+                dir: '',
+                currentArticleIndex: 0
+            }
+        },
+        computed:{
+            currentArticle(){
+                return this.$store.state.post.myList.length>0?this.$store.state.post.myList[this.currentArticleIndex]:null;
             }
         },
         methods: {
-            addArticle(){
-                store.dispatch('ADD_MY_ARTICLE',this.$route.query.token)
+            valueChange(val){
+                this.currentArticle.content=val
             },
-            itemClick(article,index){
+            deleteArticle(id,index){
+                let params = {token:this.$route.query.token,id:id,index:index}
+                store.dispatch('DELETE_MY_ARTICLE', params)
+            },
+            updateArticleState(id,state,index){
+                let params = {data:{state:state},token:this.$route.query.token,id:id,index:index}
+                store.dispatch('UPDATE_MY_ARTICLE', params)
+            },
+            addArticle(){
+                store.dispatch('ADD_MY_ARTICLE', this.$route.query.token)
+            },
+            itemClick(article, index){
                 this.currentArticleIndex = index;
             },
             formatTime(time){
@@ -131,9 +159,6 @@
                     this.$store.state.user.info || (this.showMenu = false)
                 })
             },
-            toPostPage() {
-                this.$router.push("/post")
-            }
         },
         created() {
         }
@@ -313,11 +338,11 @@
 
             }
         }
-        .post-page-dir-list-item-wrap{
+        .post-page-dir-list-item-wrap {
             padding: @main-block-margin 0;
-            ul{
+            ul {
                 padding-left: 15px;
-                li{
+                li {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -366,13 +391,54 @@
                 margin-top: @main-block-margin;
                 padding-bottom: @main-margin;
                 border-bottom: 1px solid @main-border-color;
-                h4 {
-                    width: 120px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    &:hover{
-                        color: @main-them-hover-color;
+
+                .post-page-article-list-item-header {
+                    display: flex;
+                    justify-content: space-between;
+                    h4 {
+                        width: 120px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        &:hover {
+                            color: @main-them-hover-color;
+                        }
+                    }
+                    span {
+                        padding: 2px 3px;
+                        font-size: 12px;
+
+                    }
+                    .post-page-article-list-item-header-dropdown-list {
+                        position: relative;
+                        &:hover{
+                            ul{
+                                display: block;
+                            }
+                        }
+                        ul {
+                            display: none;
+                            position: absolute;
+                            width: 36px;
+                            padding: 5px;
+                            left: -50%;
+                            font-size: 12px;
+                            border: 1px solid @main-border-color;
+                            li {
+                                padding: 2.5px 0;
+                                border-bottom: 1px solid @main-border-color;
+                                &:last-child{
+                                    padding-bottom: 0;
+                                    border-bottom: none;
+                                }
+                                &:first-child{
+                                    padding-top: 0;
+                                }
+                                &:hover{
+                                    color: @main-them-hover-color;
+                                }
+                            }
+                        }
                     }
                 }
                 .post-page-article-list-item-content {

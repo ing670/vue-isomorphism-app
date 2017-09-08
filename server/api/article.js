@@ -1,9 +1,9 @@
 /**
  * Created by sdsd on 2017/8/30.
  */
-var Article = require('../models/Article');
+const Article = require('../models/Article');
 let userAuth=require('../middleware/userAuthorization')
-
+const ERROR_CODE = require('./errorcodes')
 module.exports = [
     {
         path: '/article',
@@ -18,7 +18,7 @@ module.exports = [
             let article = new Article(req.body);
             article.save(function (err,article) {
                 if (err) {
-                    res.json({code: 1002,msg:"添加文章失败"});
+                    res.json(ERROR_CODE.ADD_ARTICLE_FAIL);
                 } else {
                     res.json({code: 0,data:article});
                 }
@@ -37,7 +37,7 @@ module.exports = [
                     if (!err) {
                         res.json({code: 0, data: article});
                     } else {
-                        res.json({code: 0, data: {}});
+                        res.json({...ERROR_CODE.GET_ARTICLE_FAIL,data: null});
                     }
                 })
 
@@ -53,15 +53,15 @@ module.exports = [
         path: '/article/:id',
         method: 'delete',
         action: "deleteArticle",
+        mid:userAuth.checkLogin,
         callback: function (req, res) {
             if (req.params.id) {
                 Article.deleteOne({'_id': req.params.id}, function (err, article) {
                     if (!err) {
                         res.json({code: 0,data: null, msg: "删除成功"});
                     } else {
-                        res.json({code: 0, data: null,msg:'删除失败'});
+                        res.json({...ERROR_CODE.DEL_ARTICLE_FAIL,data: null});
                     }
-
                 })
             }
 
@@ -71,15 +71,16 @@ module.exports = [
         path: '/article/:id',
         method: 'patch',
         action: "updateArticle",
+        mid:userAuth.checkLogin,
         callback: function (req, res) {
             if (req.params.id) {
-                console.log(req.body)
-                Article.findOneAndUpdate({'_id': req.params.id},req.body, function (err, article) {
-                    console.log(err)
+                let patch=req.body
+                Article.findOneAndUpdate({'_id': req.params.id},patch, function (err, article) {
+                    let at=article.toJSON();
                     if (!err) {
-                        res.json({code: 0,data: article, msg: "更新成功"});
+                        res.json({code: 0,data: {...at,...patch}, msg: "更新成功"});
                     } else {
-                        res.json({code: 0, data: null,msg:'更新失败'});
+                        res.json(ERROR_CODE.UPDATE_ARTICLE_FAIL);
                     }
 
                 })
@@ -93,9 +94,9 @@ module.exports = [
         method: 'get',
         action: "getArticles",
         callback: function (req, res) {
-                Article.find({}).populate('tag').populate('author','name avatar').exec(function (err, articles) {
+                Article.find({}).populate('tag').populate('author','name avatar').sort({'_id':'-1'}).exec(function (err, articles) {
                     if (err) {
-                        res.json({code: -1, data: []});
+                        res.json({...ERROR_CODE.GET_ARTICLES_FAIL,data:[]});
                     }
                     res.json({code: 0, data: articles});
                 })
@@ -107,9 +108,9 @@ module.exports = [
         mid:userAuth.checkLogin,
         callback: function (req, res) {
             if(req.loginUser){
-                Article.find({author:req.loginUser._id}).populate('tag').populate('author','name avatar').sort({'_id':'-1'}).exec(function (err, articles) {
+                Article.find({author:req.loginUser._id}).populate('tag').sort({'_id':'-1'}).exec(function (err, articles) {
                     if (err) {
-                        res.json({code: -1, data: []});
+                        res.json({...ERROR_CODE.GET_MY_ARTICLES_FAIL,data:[]});
                     }
                     res.json({code: 0, data: articles});
                 })
