@@ -11,6 +11,16 @@ var articel = {
         tags:[]
     },
     actions: {
+        UPLOAD_FILE(store,params){
+            return new Promise((resolve,reject)=>{
+                let config = {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }
+                axios.post(baseUrl +`/api/upload`,params,config).then((res)=>{
+                    console.log(res)
+                }).catch(err => console.log(err));
+            })
+        },
         SEARCH_TAG_LIST(store,keyword){
             return new Promise((resolve,reject)=>{
                 axios.get(baseUrl +`/api/searchTag/${keyword}`).then((res)=>{
@@ -47,7 +57,7 @@ var articel = {
             return new Promise((resolve, reject) => {
                let at={
                    'state':0,
-                   'title': "无标题",
+                   'title': "我是标题",
                    'content': "写点什么呢...",
                    'tags': [],
                    'cover': "",
@@ -62,8 +72,17 @@ var articel = {
         GET_MY_ARTICLES: (store, token) => {
             return new Promise((resolve, reject) => {
                 axios.get(baseUrl + `/api/myArticles?token=${token}`).then(function (res) {
-                    store.commit('UPDATE_MY_ARTICLES', res.data.data)
-                    resolve()
+                    if(res.data.data&&res.data.data.length>0){
+                        store.commit('UPDATE_MY_ARTICLES', res.data.data)
+                        resolve()
+                    }else {
+                        console.log("mytoken",token)
+
+                        store.dispatch('ADD_MY_ARTICLE',token).then(()=>{
+                            resolve()
+                        })
+                    }
+
                 }).catch(err => console.log(err));
             })
         }

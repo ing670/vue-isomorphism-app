@@ -10,7 +10,7 @@
             <div class="home-item-wrap" @click="itemClick(it)" v-for="it in $store.state.home.lists" :key="it._id">
                 <div class="home-item-left">
                     <div class="home-item-info">
-                        <span>{{it.author.name}}</span>&nbsp;-&nbsp;
+                        <span>{{it.author&&it.author.name}}</span>&nbsp;-&nbsp;
                         <span>{{dealTime(it.createTime)}}</span>&nbsp;-&nbsp;
                         <span class="home-item-category"><span v-for="cg in it.tags">{{cg.title}}</span></span>
                     </div>

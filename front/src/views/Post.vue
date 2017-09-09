@@ -38,8 +38,8 @@
                         <div class="post-page-article-list-item-header-dropdown-list">
                             <Icon fontCode="e8b8"></Icon>
                             <ul>
-                                <li  v-if="it.state==0" @click.stop="updateArticleState(it._id,1,index)">发布</li>
-                                <li  v-if="it.state==1" @click.stop="updateArticleState(it._id,0,index)">撤回</li>
+                                <li v-if="it.state==0" @click.stop="updateArticleState(it._id,1,index)">发布</li>
+                                <li v-if="it.state==1" @click.stop="updateArticleState(it._id,0,index)">撤回</li>
                                 <li @click.stop="deleteArticle(it._id,index)">删除</li>
                             </ul><!--<span>发布</span><span>撤回</span><span>删除</span>--></div>
                     </div>
@@ -53,30 +53,35 @@
         <main>
             <div class="post-page-ed-header">
                 <div class="post-page-ed-title">
-
-                    <lable>标题</lable>
                     <input type="text" placeholder="请输入标题" v-model="currentArticle.title">
                 </div>
                 <div class="post-page-save-button">保存</div>
                 <div class="post-page-pub-button">发布</div>
             </div>
             <div class="post-page-ed-tag">
-                <span v-for="(t,index) in currentArticle.tags">{{t.title}} <Icon @click="delTag(index)" fontCode="e5cd"></Icon></span>
+                <span v-for="(t,index) in currentArticle.tags">{{t.title}} <Icon @click="delTag(index)"
+                                                                                 fontCode="e5cd"></Icon></span>
                 <div v-clickoutside="hideSearchTagList" class="post-page-ed-tag-auto-complete">
-                    <input type="text"  v-model="tagValue">
-                    <ul class="post-page-ed-tag-list" :style="'display:'+($store.state.post.searchTags.length>0?'block':'none')">
-                        <li @click="tagClick(tag)" v-for="tag in $store.state.post.searchTags" :key="tag._id">{{tag.title}}</li>
+                    <input type="text" placeholder="选择标签" v-model="tagValue">
+                    <ul class="post-page-ed-tag-list"
+                        :style="'display:'+($store.state.post.searchTags.length>0?'block':'none')">
+                        <li @click="tagClick(tag)" v-for="tag in $store.state.post.searchTags" :key="tag._id">
+                            {{tag.title}}
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="post-page-ed-cover">
+
                 <div>
+                    <input @change="imgUpload($event)" type="file"/>
                     <div></div>
                     <div></div>
                 </div>
             </div>
 
-            <Editor ref="editor" @valueChange="valueChange" :value="currentArticle.content" @toc-change="getToc"></Editor>
+            <Editor ref="editor" @valueChange="valueChange" :value="currentArticle.content"
+                    @toc-change="getToc"></Editor>
         </main>
         <div class="post-page-dir-list">
             <div class="post-page-article-list-header">
@@ -117,42 +122,49 @@
                 showMenu: false,
                 dir: '',
                 currentArticleIndex: 0,
-                displayTagList:true,
+                displayTagList: true,
             }
         },
-        watch:{
-            tagValue(newValue,oldValue){
-                newValue&&setTimeout(()=>{
-                    this.$store.dispatch('SEARCH_TAG_LIST',newValue)
-                },500)
+        watch: {
+            tagValue(newValue, oldValue){
+                newValue && setTimeout(() => {
+                    this.$store.dispatch('SEARCH_TAG_LIST', newValue)
+                }, 500)
             }
         },
-        computed:{
+        computed: {
             currentArticle(){
-                return this.$store.state.post.myList.length>0?this.$store.state.post.myList[this.currentArticleIndex]:null;
+                return this.$store.state.post.myList.length > 0 ? this.$store.state.post.myList[this.currentArticleIndex] : null;
             }
         },
         methods: {
+            imgUpload(e){
+                let file = e.target.files[0];
+                let param = new FormData(); //创建form对象
+                param.append('cover',file)
+                console.log(param.get('file'));
+                this.$store.dispatch('UPLOAD_FILE',param)
+            },
             delTag(index){
-                this.currentArticle.tags.splice(index,1)
+                this.currentArticle.tags.splice(index, 1)
             },
             hideSearchTagList(){
-                this.$store.state.post.searchTags=[];
+                this.$store.state.post.searchTags = [];
             },
             tagClick(tag){
                 this.currentArticle.tags.push(tag)
-                this.tagValue ="";
+                this.tagValue = "";
                 this.hideSearchTagList();
             },
             valueChange(val){
-                this.currentArticle.content=val
+                this.currentArticle.content = val
             },
-            deleteArticle(id,index){
-                let params = {token:this.$route.query.token,id:id,index:index}
+            deleteArticle(id, index){
+                let params = {token: this.$route.query.token, id: id, index: index}
                 store.dispatch('DELETE_MY_ARTICLE', params)
             },
-            updateArticleState(id,state,index){
-                let params = {data:{state:state},token:this.$route.query.token,id:id,index:index}
+            updateArticleState(id, state, index){
+                let params = {data: {state: state}, token: this.$route.query.token, id: id, index: index}
                 store.dispatch('UPDATE_MY_ARTICLE', params)
             },
             addArticle(){
@@ -211,7 +223,7 @@
         .post-page-ed-tag-auto-complete {
             position: relative;
             ul {
-                top:20px;
+                top: 20px;
                 position: absolute;
                 background: #fff;
                 z-index: 1;
@@ -254,7 +266,6 @@
                 align-items: center;
                 flex: 1;
                 input {
-                    margin-left: @main-block-margin;
                     border: none;
                     height: 100%;
                     width: 80%;
@@ -269,6 +280,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            input {
+                cursor: pointer;
+                display: block;
+                width: 100%;
+                opacity: 0;
+                position: absolute;
+                height: 100%;
+            }
             > div {
                 cursor: pointer;
                 position: relative;
@@ -305,7 +324,7 @@
                 font-size: 12px;
                 //  background: @main-bg-color;
             }
-            >span {
+            > span {
                 padding: 2px 4px;
                 font-size: 12px;
                 color: #fff;
@@ -313,19 +332,21 @@
                 margin-right: @main-margin;
                 border-radius: 2px;
                 position: relative;
-                .wk-icon{
+                .wk-icon {
                     display: none;
                     cursor: pointer;
                     position: absolute;
                     right: -3px;
-                    top:-5px;
+                    top: -5px;
                     background: @main-them-hover-color;
                     border-radius: 100%;
                     color: #fff;
                     font-size: 12px;
                 }
-                &:hover{
-                    .wk-icon{display: block}
+                &:hover {
+                    .wk-icon {
+                        display: block
+                    }
                 }
             }
         }
@@ -443,8 +464,8 @@
                     }
                     .post-page-article-list-item-header-dropdown-list {
                         position: relative;
-                        &:hover{
-                            ul{
+                        &:hover {
+                            ul {
                                 display: block;
                             }
                         }
@@ -459,14 +480,14 @@
                             li {
                                 padding: 2.5px 0;
                                 border-bottom: 1px solid @main-border-color;
-                                &:last-child{
+                                &:last-child {
                                     padding-bottom: 0;
                                     border-bottom: none;
                                 }
-                                &:first-child{
+                                &:first-child {
                                     padding-top: 0;
                                 }
-                                &:hover{
+                                &:hover {
                                     color: @main-them-hover-color;
                                 }
                             }

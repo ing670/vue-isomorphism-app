@@ -25,7 +25,7 @@ var articel = {
         },
         GET_TAGS: (store, args) => {
             return new Promise((resolve, reject) => {
-                axios.get(baseUrl + '/api/tag').then(function (res) {
+                axios.get(baseUrl + '/api/tags').then(function (res) {
                     store.commit('UPDATE_TAG', res.data.data)
                     resolve()
                 }).catch(err => console.log(err));

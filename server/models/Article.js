@@ -12,11 +12,9 @@ var articleJson = {
     'state':{default:0,type:Number},//0:未发表 1:已经发表
     'title':{ //文章标题
         type: 'String',
-        required:[true,'请输入标题'],
     },
     'content': { //文章内容
         type: 'String',
-        required:[true,'请输入内容'],
     },
     'tags': [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     'author':{ type: Schema.Types.ObjectId, ref: 'User' },

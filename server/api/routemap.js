@@ -5,10 +5,12 @@
 let user = require('./user')
 let article = require('./article')
 let category = require('./tag')
+let common = require('./common')
 
 var routemap = [
     ...user,
     ...article,
-    ...category
+    ...category,
+    ...common
 ];
 module.exports = routemap;
