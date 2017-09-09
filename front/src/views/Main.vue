@@ -49,6 +49,7 @@
             Login,
             IconText
         },
+
         data() {
             return {
                 avatar: avatar,
@@ -68,9 +69,7 @@
                 this.$router.push(`/post?token=${this.$route.query.token}`)
             }
         },
-        mounted() {
 
-        }
     }
 
 </script>

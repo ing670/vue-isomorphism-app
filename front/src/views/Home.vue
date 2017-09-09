@@ -39,7 +39,9 @@
     import moment from '../util/time'
     export default {
         name: 'home-view',
-
+        asyncData ({store,route}) {
+            return store.dispatch('GET_HOME_DATA',route)
+        },
         computed: {
         },
         methods: {
@@ -52,9 +54,7 @@
         },
 
 
-        asyncData ({store,route}) {
-            return store.dispatch('GET_HOME_DATA',route)
-        },
+
 
 //  title () {
 //    return this.user

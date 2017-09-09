@@ -4,6 +4,7 @@
   "author": "Evan You <yyx990803@gmail.com>",
   "private": true,
   "scripts": {
+    "init":"node ./server/init.js",
     "dev": " pm2 kill  && pm2 start ecosystem.config.js  --watch --no-daemon ",
     "start": "cross-env NODE_ENV=production node server",
     "build": "rimraf dist && npm run build:client && npm run build:server",

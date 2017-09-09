@@ -3,7 +3,7 @@
     <div class="post-page" v-if="$store.state.user.info">
         <div class="post-page-menu-list">
             <div class="logo-wrap">
-                <router-link to="/" exact>
+                <router-link :to='$store.state.user.info?"/?token="+$store.state.user.info.token:"/"' exact>
                     <img class="logo" src="../../public/avatar.jpg" alt="logo">
                 </router-link>
             </div>

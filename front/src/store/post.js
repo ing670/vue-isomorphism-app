@@ -109,7 +109,6 @@ var articel = {
         UPDATE_MY_ARTICLES:(state, args)=>{
             if(args&&Array.isArray(args)){
                 state.myList = args
-                console.log("13123123213",JSON.stringify(state.myList))
             }
         },
         UPDATE_MY_TAG: (state, args) => {
