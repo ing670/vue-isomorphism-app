@@ -33,7 +33,7 @@ module.exports = [
         action: "getArticleDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Article.findOne({'_id': req.params.id}).populate('tag').populate('author').exec(function (err, article) {
+                Article.findOne({'_id': req.params.id}).populate('tags').populate('author').exec(function (err, article) {
                     if (!err) {
                         res.json({code: 0, data: article});
                     } else {
@@ -75,14 +75,13 @@ module.exports = [
         callback: function (req, res) {
             if (req.params.id) {
                 let patch=req.body
-                Article.findOneAndUpdate({'_id': req.params.id},patch, function (err, article) {
-                    let at=article.toJSON();
+                Article.findOneAndUpdate({'_id': req.params.id},patch).populate('tags').exec(function (err, article) {
                     if (!err) {
+                        let at=article.toJSON();
                         res.json({code: 0,data: {...at,...patch}, msg: "更新成功"});
                     } else {
                         res.json(ERROR_CODE.UPDATE_ARTICLE_FAIL);
                     }
-
                 })
             }
 
@@ -94,7 +93,7 @@ module.exports = [
         method: 'get',
         action: "getArticles",
         callback: function (req, res) {
-                Article.find({}).populate('tag').populate('author','name avatar').sort({'_id':'-1'}).exec(function (err, articles) {
+                Article.find({}).populate('tags').populate('author','name avatar').sort({'_id':'-1'}).exec(function (err, articles) {
                     if (err) {
                         res.json({...ERROR_CODE.GET_ARTICLES_FAIL,data:[]});
                     }
@@ -108,7 +107,7 @@ module.exports = [
         mid:userAuth.checkLogin,
         callback: function (req, res) {
             if(req.loginUser){
-                Article.find({author:req.loginUser._id}).populate('tag').sort({'_id':'-1'}).exec(function (err, articles) {
+                Article.find({author:req.loginUser._id}).populate('tags').sort({'_id':'-1'}).exec(function (err, articles) {
                     if (err) {
                         res.json({...ERROR_CODE.GET_MY_ARTICLES_FAIL,data:[]});
                     }

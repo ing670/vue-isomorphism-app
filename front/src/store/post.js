@@ -8,16 +8,21 @@ var articel = {
     state: {
         myList:[],
         searchTags:[],
-        tags:[]
+        tags:[],
+        index:0
     },
     actions: {
+        SAVE_ARTICLE(){
+
+        },
         UPLOAD_FILE(store,params){
             return new Promise((resolve,reject)=>{
                 let config = {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
                 axios.post(baseUrl +`/api/upload`,params,config).then((res)=>{
-                    console.log(res)
+                    res.data.code ===0&&store.commit("UPDATE_MY_ARTICLE",{data:{cover:res.data.data.cover},index:store.state.index})
+                    resolve();
                 }).catch(err => console.log(err));
             })
         },
@@ -47,7 +52,7 @@ var articel = {
         UPDATE_MY_ARTICLE:(store,params)=>{
             return new Promise((resolve, reject) => {
                 axios.patch(baseUrl + `/api/article/${params.id}?token=${params.token}`,params.data).then(function (res) {
-                    let data = {data:res.data.data,index:params.index};
+                    let data = {data:res.data.data,index:store.state.index};
                     store.commit('UPDATE_MY_ARTICLE', data)
                     resolve()
                 }).catch(err => console.log(err));
@@ -98,7 +103,6 @@ var articel = {
             state.myList.unshift(article)
         },
         UPDATE_MY_ARTICLE:(state,{data,index})=>{
-
             Object.assign(state.myList[index],data)
 
         },

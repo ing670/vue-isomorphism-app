@@ -24,7 +24,7 @@ module.exports = [
         mid:upload.single('cover'),
         action: "upload",
         callback: function (req, res) {
-            res.json({code:0,cover:`/public/upload/${req.file.filename}`})
+            res.json({code:0,data:{cover:`/public/upload/${req.file.filename}`}})
         }
     }
 ]

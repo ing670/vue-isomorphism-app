@@ -38,10 +38,11 @@
                         <div class="post-page-article-list-item-header-dropdown-list">
                             <Icon fontCode="e8b8"></Icon>
                             <ul>
-                                <li v-if="it.state==0" @click.stop="updateArticleState(it._id,1,index)">发布</li>
-                                <li v-if="it.state==1" @click.stop="updateArticleState(it._id,0,index)">撤回</li>
+                                <li v-if="it.state==0" @click.stop="updateArticleState(it._id,1)">发布</li>
+                                <li v-if="it.state==1" @click.stop="updateArticleState(it._id,0)">撤回</li>
                                 <li @click.stop="deleteArticle(it._id,index)">删除</li>
-                            </ul><!--<span>发布</span><span>撤回</span><span>删除</span>--></div>
+                            </ul>
+                        </div>
                     </div>
                     <div class="post-page-article-list-item-time">{{formatTime(it.createTime)}}</div>
                     <div class="post-page-article-list-item-content">
@@ -55,8 +56,8 @@
                 <div class="post-page-ed-title">
                     <input type="text" placeholder="请输入标题" v-model="currentArticle.title">
                 </div>
-                <div class="post-page-save-button">保存</div>
-                <div class="post-page-pub-button">发布</div>
+                <div class="post-page-save-button" @click="save">保存</div>
+                <div class="post-page-pub-button" @click="saveAndPub">发布</div>
             </div>
             <div class="post-page-ed-tag">
                 <span v-for="(t,index) in currentArticle.tags">{{t.title}} <Icon @click="delTag(index)"
@@ -71,13 +72,16 @@
                     </ul>
                 </div>
             </div>
-            <div class="post-page-ed-cover">
+            <div class="post-page-ed-cover" :style='"background-image: url("+currentArticle.cover+")"'>
 
-                <div>
-                    <input @change="imgUpload($event)" type="file"/>
+                <div v-if="!currentArticle.cover">
+                    <input @change="imgUpload($event)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                           type="file"/>
                     <div></div>
                     <div></div>
                 </div>
+                <Icon v-show="currentArticle.cover" @click="delCover"
+                      fontCode="e5cd"></Icon>
             </div>
 
             <Editor ref="editor" @valueChange="valueChange" :value="currentArticle.content"
@@ -103,6 +107,7 @@
 
 
     import moment from '../util/time'
+
     const Editor = () => inBrowser ? import('../components/Editor.vue') : import('../components/Empty.vue')
 
     export default {
@@ -121,62 +126,91 @@
                 avatar: avatar,
                 showMenu: false,
                 dir: '',
-                currentArticleIndex: 0,
                 displayTagList: true,
             }
         },
         watch: {
-            tagValue(newValue, oldValue){
+            tagValue(newValue, oldValue) {
                 newValue && setTimeout(() => {
                     this.$store.dispatch('SEARCH_TAG_LIST', newValue)
                 }, 500)
             }
         },
         computed: {
-            currentArticle(){
+            currentArticle() {
                 return this.$store.state.post.myList.length > 0 ? this.$store.state.post.myList[this.currentArticleIndex] : null;
-            }
+            },
+            currentArticleIndex: {
+                get() {
+                    return this.$store.state.post.index
+                },
+                set(val) {
+                    this.$store.state.post.index = val;
+                }
+            },
         },
         methods: {
-            imgUpload(e){
-                let file = e.target.files[0];
-                let param = new FormData(); //创建form对象
-                param.append('cover',file)
-                console.log(param.get('file'));
-                this.$store.dispatch('UPLOAD_FILE',param)
+            saveAndPub(){
+                this.$store.dispatch("UPDATE_MY_ARTICLE", {data: this.currentArticle,token: this.$route.query.token, id: this.currentArticle._id}).then(() => {
+                    this.updateArticleState(this.currentArticle._id,1)
+                })
             },
-            delTag(index){
+            save() {
+                this.$store.dispatch("UPDATE_MY_ARTICLE", {data: this.currentArticle,token: this.$route.query.token, id: this.currentArticle._id}).then(() => {
+                    alert("保存成功")
+                })
+            },
+            delCover() {
+                this.currentArticle.cover = '';
+            },
+            imgUpload(e) {
+                let file = e.target.files[0];
+                if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
+                    alert("图片类型必须是.gif,jpeg,jpg,png中的一种")
+                    return false;
+                }
+                let param = new FormData(); //创建form对象
+                param.append('cover', file, file.name);
+                this.$store.dispatch('UPLOAD_FILE', param)
+            },
+            delTag(index) {
                 this.currentArticle.tags.splice(index, 1)
             },
-            hideSearchTagList(){
+            hideSearchTagList() {
                 this.$store.state.post.searchTags = [];
             },
-            tagClick(tag){
+            tagClick(tag) {
                 this.currentArticle.tags.push(tag)
                 this.tagValue = "";
                 this.hideSearchTagList();
             },
-            valueChange(val){
+            valueChange(val) {
                 this.currentArticle.content = val
             },
-            deleteArticle(id, index){
+            deleteArticle(id, index) {
                 let params = {token: this.$route.query.token, id: id, index: index}
                 store.dispatch('DELETE_MY_ARTICLE', params)
             },
-            updateArticleState(id, state, index){
-                let params = {data: {state: state}, token: this.$route.query.token, id: id, index: index}
-                store.dispatch('UPDATE_MY_ARTICLE', params)
+            updateArticleState(id, state) {
+                let params = {data: {state: state}, token: this.$route.query.token, id: id}
+                store.dispatch('UPDATE_MY_ARTICLE', params).then(()=>{
+                    if(state){
+                        alert("发布成功")
+                    }else{
+                        alert("撤回成功")
+                    }
+                })
             },
-            addArticle(){
+            addArticle() {
                 store.dispatch('ADD_MY_ARTICLE', this.$route.query.token)
             },
-            itemClick(article, index){
+            itemClick(article, index) {
                 this.currentArticleIndex = index;
             },
-            formatTime(time){
+            formatTime(time) {
                 return moment(+time).fromNow()
             },
-            getToc(toc){
+            getToc(toc) {
                 this.dir = toc
             },
             hideMenu() {
@@ -274,12 +308,37 @@
             }
         }
         .post-page-ed-cover {
+            position: relative;
             height: 140px;
             min-height: 140px;
             background: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            .wk-icon {
+                display: none;
+                cursor: pointer;
+                position: absolute;
+                right: -3px;
+                top: -5px;
+                background: @main-them-hover-color;
+                border-radius: 100%;
+                color: #fff;
+                font-size: 13px;
+                padding: px;
+                width: 15px;
+                height: 15px;
+                line-height: 15px;
+                text-align: center;
+            }
+            &:hover {
+                .wk-icon {
+                    display: block;
+                }
+            }
             input {
                 cursor: pointer;
                 display: block;
@@ -470,6 +529,7 @@
                             }
                         }
                         ul {
+                            background: #fff;
                             display: none;
                             position: absolute;
                             width: 36px;
