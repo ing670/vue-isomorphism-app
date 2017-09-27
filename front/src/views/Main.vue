@@ -16,7 +16,7 @@
                     </div>
                     <div class="user-wrap" v-clickoutside="hideMenu">
                         <a class="user-action" v-if="!$store.state.user.info" href="javascript:void(0);"><span
-                                @click="$refs.login.show()">登录</span>|<span>注册</span></a>
+                                @click="$refs.login.show()">登录</span>|<span @click="$refs.register.show()">注册</span></a>
                         <div v-if="$store.state.user.info" class="user-after-login">
                             <IconText @click="toPostPage" class="user-after-login-post" text="写文章" fontCode="e145" position="left"></IconText>
                             <a @click="showMenu=true" class="user-action" href="javascript:void(0);">
@@ -35,6 +35,7 @@
             </transition>
         </main>
         <Login ref="login"></Login>
+        <Register ref="register"></Register>
     </div>
 
 </template>
@@ -42,11 +43,14 @@
     import avatar from '../../public/avatar.jpg'
 
     import Login from '../components/Login.vue'
+    import Register from '../components/Register.vue'
+
     import IconText from '../components/icontext/index.vue'
 
     export default {
         components: {
             Login,
+            Register,
             IconText
         },
 

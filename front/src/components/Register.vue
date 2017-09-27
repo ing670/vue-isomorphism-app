@@ -1,20 +1,21 @@
 <template>
-    <div v-show="showing" class="login-mask">
-        <div class="login-form">
-            <h3><span>登录</span>
-                <Icon @click="hide" class="login-form-close" fontCode="e5cd"></Icon>
+    <div v-show="showing" class="register-mask">
+        <div class="register-form">
+            <h3><span>注册</span>
+                <Icon @click="hide" class="register-form-close" fontCode="e5cd"></Icon>
             </h3>
-            <input  v-model="userName" class="login-form-input" type="text" placeholder="请输入邮箱"/>
-            <input v-model="passWord" class="login-form-input" type="password" placeholder="请输入密码"/>
-            <div class="login-button" @click="login">登录</div>
-            <div class="login-help"><span>没有账号?<a href="javascript:void(0)">注册</a></span><a href="javascript:void(0)">忘记密码</a>
+            <input  v-model="userName" :class="'register-form-input '+(userNameErr?'register-form-error':'')" type="text" placeholder="请输入邮箱"/>
+            <input v-model="passWord" class="register-form-input" type="password" placeholder="请输入密码"/>
+            <input v-model="copyPassWord" class="register-form-input" type="password" placeholder="请再次输入密码"/>
+            <div class="register-button" @click="register">登录</div>
+            <div class="register-help"><span>已经有账号?<a href="javascript:void(0)">登录</a></span>
             </div>
-            <div class="login-other-way"><span>第三方账号登录:</span>
-                <a href="javascript:void(0)">QQ</a>
-                <a href="javascript:void(0)">微信</a>
-                <a href="javascript:void(0)">Github</a>
-                <a href="javascript:void(0)">微博</a>
-            </div>
+            <!--<div class="register-other-way"><span>第三方账号登录:</span>-->
+                <!--<a href="javascript:void(0)">QQ</a>-->
+                <!--<a href="javascript:void(0)">微信</a>-->
+                <!--<a href="javascript:void(0)">Github</a>-->
+                <!--<a href="javascript:void(0)">微博</a>-->
+            <!--</div>-->
 
         </div>
     </div>
@@ -26,7 +27,9 @@
         data(){
             return {
                 userName:'',
+                userNameErr:false,
                 passWord:'',
+                copyPassWord:'',
                 showing: false
             }
         },
@@ -38,6 +41,20 @@
                     })
 
                 }
+            },
+            userName(nv){
+                console.log(nv)
+                let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/ ;
+                let isok= reg.test(nv);
+                if(isok){
+                    this.userNameErr= false;
+                    //查询是否注册
+                }else{
+                    this.userNameErr= true;
+                }
+                if(!nv){
+                    this.userNameErr= false;
+                }
             }
         },
 //        asyncData ({store,route}) {
@@ -45,8 +62,8 @@
 //            return store.dispatch("GET_USER_INFO")
 //        },
         methods: {
-            login(){
-              this.$store.dispatch("LOGIN",{userName:this.userName,passWord:this.passWord}).then(()=>{
+            register(){
+              this.$store.dispatch("register",{userName:this.userName,passWord:this.passWord}).then(()=>{
                   if(this.$store.state.user.info){
                       location.replace(host+'/'+'?token='+this.$store.state.user.info.token)
                   }
@@ -71,7 +88,7 @@
     /*e5cd*/
     @import '../theme/var';
 
-    .login-mask {
+    .register-mask {
         position: fixed;
         height: 100%;
         width: 100%;
@@ -81,12 +98,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        .login-form {
-            .login-form-close {
+
+        .register-form {
+            .register-form-close {
                 cursor: pointer;
             }
             border-radius: 4px;
-            .login-other-way {
+            .register-other-way {
                 font-size: 14px;
                 color: @main-text-color;
                 margin-top: 20px;
@@ -95,7 +113,7 @@
                     color: @main-them-color;
                 }
             }
-            .login-help {
+            .register-help {
                 margin: 10px 0;
                 display: flex;
                 justify-content: space-between;
@@ -106,7 +124,7 @@
                     color: @main-them-color;
                 }
             }
-            .login-button {
+            .register-button {
                 width: 100%;
                 height: 40px;
                 line-height: 40px;
@@ -123,13 +141,17 @@
                 align-items: center;
                 margin-bottom: @main-margin;
             }
-            .login-form-input {
+            .register-form-input {
+                outline: none;
                 padding: 10px;
                 display: block;
                 width: 100%;
                 border: 1px solid @main-bg-color;
                 font-size: 14px;
                 margin-bottom: 10px;
+            }
+            .register-form-error{
+                border: 1px solid lightcoral;
             }
             width: 360px;
             margin: 0 auto;
