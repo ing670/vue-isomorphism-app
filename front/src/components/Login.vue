@@ -9,12 +9,12 @@
             <div class="login-button" @click="login">登录</div>
             <div class="login-help"><span>没有账号?<a href="javascript:void(0)">注册</a></span><a href="javascript:void(0)">忘记密码</a>
             </div>
-            <div class="login-other-way"><span>第三方账号登录:</span>
-                <a href="javascript:void(0)">QQ</a>
-                <a href="javascript:void(0)">微信</a>
-                <a href="javascript:void(0)">Github</a>
-                <a href="javascript:void(0)">微博</a>
-            </div>
+            <!--<div class="login-other-way"><span>第三方账号登录:</span>-->
+                <!--<a href="javascript:void(0)">QQ</a>-->
+                <!--<a href="javascript:void(0)">微信</a>-->
+                <!--<a href="javascript:void(0)">Github</a>-->
+                <!--<a href="javascript:void(0)">微博</a>-->
+            <!--</div>-->
 
         </div>
     </div>
