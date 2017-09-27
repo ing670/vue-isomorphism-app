@@ -4,6 +4,23 @@ vue 同构应用
 
 1.用户鉴权协议
 jsonwebtoken
-
-pc0
-http://localhost:3000/post?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OWIwZGE4Y2MxY2MyYzIzYjhkZWM0MTUiLCJuYW1lIjoiaW5nNjcwIiwicGhvbmUiOiIxMzI0OTcyNjI3MiIsImVtYWlsIjoiMzQ2NDY3MTY3QHFxLmNvbSIsIl9fdiI6MCwiY3JlYXRlVGltZSI6IjE1MDQ3NjI1MDE2NzkiLCJpYXQiOjE1MDQ3NjI1NTF9.pvvyojPrDvxm_3MYRslrZn2j9VFtpJSFyDVsIv0-hdg
+# done
+1.登录
+2.添加文章
+3.删除文章
+4.更新文章
+5.选择标签
+6.封面上传
+7.删除封面
+8.文章markdown编写
+9.文章目录
+# TODO
+0.注册
+1.点赞
+2.评论
+3.@人
+4.个人资料修改
+5.文章推荐
+6.大牛推荐
+7.分页
+8.文章详情目录
