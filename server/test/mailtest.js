@@ -1,10 +1,11 @@
 /**
  * Created by liuqingling on 16/4/27.
  */
-
+/*
 'use strict';
 
 var nodemailer = require('../server/node_modules/nodemailer');
+
 // Create a SMTP transporter object
 var smtpConfig = {
     host: 'mail.yonyou.com',
@@ -37,3 +38,11 @@ transporter.sendMail(mailOptions, function (error, info) {
     }
     console.log('Message sent: ' + info.response);
 });
+*/
+
+let mailsender = require('../utils/mailsender')
+mailsender.send('346467156@qq.com','hello',(err)=>{
+    if(!err)
+        console.log("okokokoko")
+    console.log(err)
+})

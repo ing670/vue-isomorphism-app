@@ -136,7 +136,7 @@
                 this.$store.dispatch("REGISTER", {userName: this.userName, passWord: this.passWord}).then((res) => {
                    if(res.data.code == 0){
                        this.hide();
-                       alert("注册成功")
+                       alert(res.data.msg)
                    }else if(res.data.code == ERROR.USER_EXIST.code){
                        this.userNameTips = ERROR.USER_EXIST.msg;
                        this.userNameErr = true;

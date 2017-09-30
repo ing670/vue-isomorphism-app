@@ -24,7 +24,13 @@ module.exports = [
             let exist = await  User.findOne({'email':userInfo.email})
             if(!exist){
                 try{
-                    user.save()
+                   let uinfo=await user.save();
+                   if(uinfo){
+
+                       res.json({code:0,msg:"注册成功"})
+                   }else{
+                       res.json(ERROR_CODE.USER_REGISTER_ERROR)
+                   }
                 }catch (err){
                     console.log(err)
                 }finally{

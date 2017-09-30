@@ -12,41 +12,35 @@
 var mongoose = require('../database/db');
 var Schema = mongoose.Schema;
 var userJson = {
-    'state':0,//是否验证通过的用户
+    'state':{
+        type: 'Number',
+        required:true,
+        default:0
+    },
     'password':{
         type: 'String',
-        required:[true,'请您输入密码'],
+        required:true,
+        default:''
     },
     'name': {
         type: 'String',
-        required:[true,'请您输入用户名'],
+        required:true,
+        default:''
     },
     'phone': {
         type: 'String',
-        required:[false,'请您输入手机号码'],
-        validate:{
-            validator: function(v) {
-                if(/^1[3|4|5|7|8]\d{9}$/.test(v)){
-                    return true
-                }else{
-                    return false;
-                }
-            },
-            message: '{VALUE} 无效手机号码'
-        }
+        required:false,
+        default:''
     },
     'email': {
         type: 'String',
-        required:[true,'请您输入邮箱'],
-        validate:{
-            validator: function(v) {
-                return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(v);
-            },
-            message: '{VALUE} 您的电子邮件格式不正确'
-        }
+        required:true,
+        default:''
     },
     'avatar':{
-        type: 'String'
+        type: 'String',
+        required:true,
+        default:''
     },
     'createTime':{type:'String', default: new Date().getTime() }
 };

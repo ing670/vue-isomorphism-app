@@ -8,7 +8,7 @@ psw.ramPassword= function (charsLength,chars) {
     if (!chars)
         var chars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ123456789";
     var randomChars = "";
-    for(x=0; x<length; x++) {
+    for(let x=0; x<length; x++) {
         var i = Math.floor(Math.random() * chars.length);
         randomChars += chars.charAt(i);
     }
