@@ -14,6 +14,7 @@ VueClickoutside.install(Vue)
 // mixin for handling title
 // Vue.use(VueClickoutside)
 Vue.mixin(titleMixin)
+Vue.prototype.$bus = new Vue();
 // Vue.use(iView)
 // register global utility filters.
 Object.keys(filters).forEach(key => {

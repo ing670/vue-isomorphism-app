@@ -1,20 +1,20 @@
 <template>
-    <div v-show="showing" class="register-mask">
+    <div v-if="showing" class="register-mask">
         <div class="register-form">
             <h3><span>注册</span>
                 <Icon @click="hide" class="register-form-close" fontCode="e5cd"></Icon>
             </h3>
             <div v-show="userNameErr" class="register-form-error-tips">{{userNameTips}}</div>
-            <input v-model="userName" :class="'register-form-input '+(userNameErr?'register-form-error':'')" type="text"
+            <input v-model="userName" ref="userNameInput" :class="'register-form-input '+(userNameErr?'register-form-error':'')" type="text"
                    placeholder="请输入邮箱"/>
-            <div v-show="stronger!=-1" :class="'register-form-password-tips '+getTipsPwdClass()">密码强度：{{passWordTips}}</div>
+            <div v-show="stronger!=-1" :class="'register-form-password-tips '+getTipsPwdClass()">{{passWordTips}}</div>
 
-            <input v-model="passWord" :class="'register-form-input '+ getPwdClass()" type="password" placeholder="请输入密码"/>
+            <input v-model="passWord" ref="passWordInput" :class="'register-form-input '+ getPwdClass()" type="password" placeholder="请输入密码"/>
             <div v-show="copyPassWordErr" class="register-form-error-tips">两次密码输入不一致</div>
 
             <input v-model="copyPassWord" :class="'register-form-input '+(copyPassWordErr?'register-form-error':'') " type="password" placeholder="请再次输入密码"/>
-            <div class="register-button" @click="register">登录</div>
-            <div class="register-help"><span>已经有账号?<a href="javascript:void(0)">登录</a></span>
+            <div class="register-button" @click="register">确定</div>
+            <div class="register-help"><span>已经有账号?<a href="javascript:void(0)" @click="toLogin">登录</a></span>
             </div>
             <!--<div class="register-other-way"><span>第三方账号登录:</span>-->
             <!--<a href="javascript:void(0)">QQ</a>-->
@@ -36,7 +36,7 @@
     //弱：纯数字，纯字母，纯特殊字符
     const last=/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/
     const userNameReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-
+    import ERROR from '../../../server/api/errorcodes'
     export default{
         data(){
             return {
@@ -53,9 +53,11 @@
         computed:{
             passWordTips(){
                 return this.stronger==-1?""
-                    :this.stronger==0?"低"
-                        :this.stronger==1?"中"
-                            :this.stronger==2?"高":""
+                    :this.stronger==0?"密码强度：低"
+                        :this.stronger==1?"密码强度：中"
+                            :this.stronger==2?"密码强度：高"
+                                :this.stronger==3?"密码不能少于6位"
+                                    :''
             }
         },
         watch: {
@@ -64,7 +66,6 @@
                     this.$nextTick(() => {
                         this.$el.querySelector('input').focus()
                     })
-
                 }
             },
             copyPassWord(nv){
@@ -72,23 +73,21 @@
                 nv||(this.copyPassWordErr=false);
             },
             passWord(nv){
-                console.log("nv==>"+nv+"<==nv")
-                this.passWord = nv.trim();
-                last.test(nv)&&(this.stronger=0);
-                mid.test(nv)&&(this.stronger=1);
-                good.test(nv)&&(this.stronger=2);
-                nv||(this.stronger=-1);
-                (this.copyPassWord === nv)?(this.copyPassWordErr=false):(this.copyPassWordErr=true);
-                console.log("this.copyPassWordErr",this.copyPassWordErr)
-                //this.$nextTick(()=>this.getPwdClass())
-//                if(last.test(nv)||mid.test(nv)||good.test(nv)){
-//
-//                }
-//                let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-//                let isok = reg.test(nv);
+               this.validatePassWord(nv)
             },
             userName(nv){
-                console.log(nv)
+                this.validateUserName(nv)
+            }
+        },
+        created(){
+            this.$bus.$on('showRegister',()=>this.show())
+        },
+        methods: {
+            toLogin(){
+                this.hide();
+                this.$bus.$emit('showLogin')
+            },
+            validateUserName(nv){
                 let isok = userNameReg.test(nv);
                 if (isok) {
                     this.userNameErr = false;
@@ -96,33 +95,52 @@
                 } else {
                     this.userNameErr = true;
                 }
-                if (!nv) {
-                    this.userNameErr = false;
-                }
-            }
-        },
-//        asyncData ({store,route}) {
-//            console.log("asdasdasdsadasdasdasdsadasdsa")
-//            return store.dispatch("GET_USER_INFO")
-//        },
-        methods: {
+//                if (!nv) {
+//                    this.userNameErr = false;
+//                }
+                return !this.userNameErr;
+            },
+            validatePassWord(nv){
+                this.passWord = nv.trim();
+                last.test(nv)&&(this.stronger=0);
+                mid.test(nv)&&(this.stronger=1);
+                good.test(nv)&&(this.stronger=2);
+                nv||(this.stronger=-1);
+                nv.length<6&&(this.stronger=3);
+                (this.copyPassWord === nv)?(this.copyPassWordErr=false):(this.copyPassWordErr=true);
+                return (this.stronger!=-1&&this.stronger!=3&&this.copyPassWordErr==false)
+            },
             getPwdClass(){
                  return this.stronger==-1?""
                      :this.stronger==0?"register-form-last"
                      :this.stronger==1?"register-form-mid"
-                         :this.stronger==2?"register-form-good":""
+                         :this.stronger==2?"register-form-good"
+                                 :this.stronger==3?"register-form-error":""
             },
             getTipsPwdClass(){
                 return this.stronger==-1?""
                     :this.stronger==0?"register-form-last-tips"
                         :this.stronger==1?"register-form-mid-tips"
-                            :this.stronger==2?"register-form-good-tips":""
+                            :this.stronger==2?"register-form-good-tips"
+                                :this.stronger==3?"register-form-error-tips":''
             },
             register(){
-                this.$store.dispatch("register", {userName: this.userName, passWord: this.passWord}).then(() => {
-                    if (this.$store.state.user.info) {
-                        location.replace(host + '/' + '?token=' + this.$store.state.user.info.token)
-                    }
+                if(!this.validateUserName(this.userName)){
+                    this.$refs.userNameInput.focus();
+                    return
+                }
+                if(!this.validatePassWord(this.passWord)){
+                    this.$refs.passWordInput.focus();
+                    return
+                }
+                this.$store.dispatch("REGISTER", {userName: this.userName, passWord: this.passWord}).then((res) => {
+                   if(res.data.code == 0){
+                       this.hide();
+                       alert("注册成功")
+                   }else if(res.data.code == ERROR.USER_EXIST.code){
+                       this.userNameTips = ERROR.USER_EXIST.msg;
+                       this.userNameErr = true;
+                   }
                 })
             },
             show(){

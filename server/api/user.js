@@ -6,26 +6,33 @@ let User = require('../models/User');
 let passport=require('../middleware/PassportMid')
 let userAuth=require('../middleware/userAuthorization')
 const jwt = require('jsonwebtoken');
+const ERROR_CODE = require('./errorcodes');
 const key = '*ing670*';
 module.exports = [
     {
         path: '/register',
         method: 'post',
         action: "register",
-        callback (req, res) {
+        async callback (req, res) {
             // test.home = "register";
             var userInfo = {};
             userInfo.name = req.body.userName;
             userInfo.password = req.body.passWord;
             req.body.phone && (userInfo.phone = req.body.phone)
-            userInfo.email = req.body.email;
+            userInfo.email = req.body.userName;
             var user = new User(userInfo);
-            user.save(function (err) {
-                if (err) {
-                    res.json({code: -1});
+            let exist = await  User.findOne({'email':userInfo.email})
+            if(!exist){
+                try{
+                    user.save()
+                }catch (err){
+                    console.log(err)
+                }finally{
+                    res.json(ERROR_CODE.USER_REGISTER_ERROR)
                 }
-                res.json({code: 0});
-            })
+            }else{
+                res.json(ERROR_CODE.USER_EXIST)
+            }
         }
     }, {
         path: '/login',

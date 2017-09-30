@@ -9,7 +9,7 @@ const inBrowser = typeof window !== 'undefined';
 export default {
 
     state: {
-        info: null
+        info: null,
     },
     actions: {
         LOGIN: (store, user) => {
@@ -44,8 +44,12 @@ export default {
                 })
             })
         },
-        REGISTER: () => {
-
+        REGISTER: (store,user) => {
+            return new Promise(async (resolve, reject) => {
+                console.log(user)
+                let res = await axios.post(`${baseUrl}/api/register`, user)
+                resolve(res)
+            })
         },
 
     },
