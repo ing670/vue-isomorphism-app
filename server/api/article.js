@@ -35,9 +35,17 @@ module.exports = [
             if (req.params.id) {
                 Article.findOne({'_id': req.params.id}).populate('tags').populate('author').exec(function (err, article) {
                     if (!err) {
-                        res.json({code: 0, data: article});
-                    } else {
-                        res.json({...ERROR_CODE.GET_ARTICLE_FAIL,data: null});
+                        article.readNum=article.readNum+1
+                        article.save(function(saveerr){
+                            if(!saveerr){
+                                res.json({code: 0, data: article});
+                            }else{
+                                res.json({...ERROR_CODE.GET_ARTICLE_FAIL,data: null});
+                                
+                            }
+                        })
+                    }else{
+                        res.json({...ERROR_CODE.GET_ARTICLE_FAIL,data: null});                        
                     }
                 })
 

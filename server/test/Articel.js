@@ -25,8 +25,11 @@ var querystring = require('querystring');
 //     'readNum': 0,
 //     'createTime': Date.now()
 // });
-Article.find({author:"59b0c3f339b75522048d4590"}).populate('tag').populate('author','name age').exec(function (err, articles) {
+Article.findOne({author:"59cf57f64f963522d46e5779"}).populate('tag').populate('author','name age').exec(function (err, articles) {
+  articles.readNum=articles.readNum+1
+  articles.save()
   console.log(articles);
+  
 })
 // article.save(function (err) {
 //     console.log(err)
