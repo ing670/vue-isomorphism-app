@@ -196,7 +196,7 @@ export default {
           if (xhr.status === 200) {
             let success = this.$emit('upload-success', xhr.responseText)
             if (success !== false) {
-              this.insertTo(`\n![alt](${xhr.responseText})\n`)
+              this.insertTo(`\n![alt](${xhr.responseText&&JSON.parse(xhr.responseText).data.cover})\n`)
             }
           } else {
             let error = this.$emit('upload-error', xhr)

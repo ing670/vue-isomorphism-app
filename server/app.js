@@ -23,7 +23,7 @@ var passport = require(__dirname + '/middleware/PassportMid');
 var initApi = require('./api');
 global.tokenMap={
     //家里电脑
-
+    '59cf57f64f963522d46e5779':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OWNmNTdmNjRmOTYzNTIyZDQ2ZTU3NzkiLCJfX3YiOjAsImNyZWF0ZVRpbWUiOiIxNTA2NzYwMjM1NzI1IiwiYXZhdGFyIjoiIiwiZW1haWwiOiIzNDY0NjcxNTZAcXEuY29tIiwicGhvbmUiOiIiLCJuYW1lIjoiMzQ2NDY3MTU2QHFxLmNvbSIsInN0YXRlIjowLCJpYXQiOjE1MTM5MjU1NzR9.pTS8H6Gpi2xN9JwS0QXHd3t4Sz9RiqpXNRHiTuKI2JM'
 };
 // view engine setup
 // app.set('views', path.join(__dirname, '../public/views'));

@@ -31,8 +31,8 @@
             return {
                 passWordTips:'',
                 userNameTips:'',
-                userName:'',
-                passWord:'',
+                userName:'346467156@qq.com',
+                passWord:'123456',
                 showing: false
             }
         },

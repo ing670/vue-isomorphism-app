@@ -21,12 +21,7 @@ var articleJson = {
     'cover': { //文章封面
         type: 'String',
     },
-    'likeNum':{ //点赞次数
-        type: 'Number',
-    },
-    'commentNum':{ //评论数
-        type: 'Number',
-    },
+    'like':[{ type: Schema.Types.ObjectId, ref: 'User' }],
     'readNum':{ //阅读数
         type: 'Number',
     },

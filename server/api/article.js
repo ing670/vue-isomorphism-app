@@ -11,8 +11,6 @@ module.exports = [
         action: "article",
         mid:userAuth.checkLogin,
         callback: function (req, res) {
-            req.body.likeNum=0;
-            req.body.commentNum=0;
             req.body.readNum=0;
             req.body.author=req.loginUser._id
             let article = new Article(req.body);
@@ -33,9 +31,9 @@ module.exports = [
         action: "getArticleDetail",
         callback: function (req, res) {
             if (req.params.id) {
-                Article.findOne({'_id': req.params.id}).populate('tags').populate('author').exec(function (err, article) {
+                Article.findOne({'_id': req.params.id}).populate('tags').populate('author').populate('like','_id name avatar').exec(function (err, article) {
                     if (!err) {
-                        article.readNum=article.readNum+1
+                        req.headers['user-agent']!='axios/0.15.3'&&article.readNum++
                         article.save(function(saveerr){
                             if(!saveerr){
                                 res.json({code: 0, data: article});
@@ -75,6 +73,7 @@ module.exports = [
 
         }
     },
+    
     {
         path: '/article/:id',
         method: 'patch',
@@ -83,7 +82,7 @@ module.exports = [
         callback: function (req, res) {
             if (req.params.id) {
                 let patch=req.body
-                Article.findOneAndUpdate({'_id': req.params.id},patch).populate('tags').exec(function (err, article) {
+                Article.findOneAndUpdate({'_id': req.params.id},patch).populate('tags').populate('author','name avatar').exec(function (err, article) {
                     if (!err) {
                         let at=article.toJSON();
                         res.json({code: 0,data: {...at,...patch}, msg: "更新成功"});

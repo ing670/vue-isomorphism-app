@@ -156,6 +156,7 @@
                 })
             },
             save() {
+               
                 this.$store.dispatch("UPDATE_MY_ARTICLE", {data: this.currentArticle,token: this.$route.query.token, id: this.currentArticle._id}).then(() => {
                     alert("保存成功")
                 })

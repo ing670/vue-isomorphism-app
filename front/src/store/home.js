@@ -3,6 +3,7 @@
  */
 // import Types from "./motations-types"
 import axios from "axios"
+import Vue from 'vue'
 var baseUrl=typeof host == "undefined"?global.host:host
 var articel = {
     state: {
@@ -13,11 +14,21 @@ var articel = {
     actions: {
         GET_ARTICLE_DATA: (store,{path}) => {
             return new Promise((resolve,reject)=>{
-                console.log("path",`${baseUrl}/api${path}`)
                 axios.get(`${baseUrl}/api${path}`).then((res)=>{
                     store.commit('UPDATE_ARTICLE_DETAIL', res.data.data)
                     resolve()
                 })
+
+            })
+        },
+        ARTICLE_LIKE(store,params){
+            return new Promise((resolve, reject) => {
+                axios.patch(baseUrl + `/api/article/${params.id}?token=${params.token}`,params.data).then(function (res) {
+                    console.log(res)
+                    let data = {data:res.data.data,index:params.index};
+                    store.commit('UPDATE_ARTICLE_LIST', data)
+                    resolve()
+                }).catch(err => console.log(err));
             })
         },
         GET_HOME_DATA: (store, args) => {
@@ -48,6 +59,9 @@ var articel = {
         },
         UPDATE_TAG: (state, args) => {
             state.tags = args;
+        },
+        UPDATE_ARTICLE_LIST:(state,args)=>{
+            Vue.set(state.lists,args.index,args.data)
         },
         UPDATE_ARTICLES: (state, args) => {
             state.lists = args?[].concat(args):[];

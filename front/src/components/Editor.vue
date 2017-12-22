@@ -1,6 +1,6 @@
 <template>
     <div class="editor-wrap">
-        <MarkdownEditor @change-toc="tocChange" @input="input" :value="value" :options="options" :upload="upload"height="100%">    </MarkdownEditor>
+        <MarkdownEditor @change-toc="tocChange" @input="input" :value="value" :options="options" :upload="upload" height="100%">    </MarkdownEditor>
     </div>
 </template>
 <script>
@@ -30,6 +30,7 @@
 
                 },
                 upload:{
+                    name:'cover',
                     url:host+'/api/upload'
                 }
             }
